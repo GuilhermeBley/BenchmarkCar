@@ -1,0 +1,1 @@
+﻿global using BenchmarkCar.Domain.Exceptions;
