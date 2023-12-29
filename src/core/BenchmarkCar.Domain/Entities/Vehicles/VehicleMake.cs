@@ -1,6 +1,6 @@
 ﻿namespace BenchmarkCar.Domain.Entities.Vehicles;
 
-public class Make
+public class VehicleMake
     : Entity
 {
     private const int MAX_NAME_LENGTH = 45;
@@ -12,7 +12,7 @@ public class Make
     public object ExternalId { get; private set; }
     public DateTimeOffset InsertedAt { get; private set; }
 
-    private Make(Guid id, string name, string normalizedName, object externalId, DateTimeOffset insertedAt)
+    private VehicleMake(Guid id, string name, string normalizedName, object externalId, DateTimeOffset insertedAt)
     {
         Id = id;
         Name = name;
@@ -23,7 +23,7 @@ public class Make
 
     public override bool Equals(object? obj)
     {
-        return obj is Make make &&
+        return obj is VehicleMake make &&
                base.Equals(obj) &&
                EntityId.Equals(make.EntityId) &&
                Id.Equals(make.Id) &&
@@ -38,7 +38,7 @@ public class Make
         return HashCode.Combine(base.GetHashCode(), EntityId, Id, Name, NormalizedName, ExternalId, InsertedAt);
     }
 
-    public static Make Create<TExternalId>(
+    public static VehicleMake Create<TExternalId>(
         Guid id, 
         string name,
         TExternalId externalId, 
@@ -57,7 +57,7 @@ public class Make
             externalIdText.Length > MAX_EXTERNALID_LENGTH)
             throw new CommonCoreException("externalIdText is invalid.");
 
-        return new Make(
+        return new VehicleMake(
             id,
             name,
             name.ToUpperInvariant(),
