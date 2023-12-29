@@ -5,6 +5,7 @@ public class VehicleModel
 {
     private const int MAX_DESCRIPTION_LENGTH = 5000;
     private const int MAX_NAME_LENGTH = 255;
+    private const int MIN_NAME_LENGTH = 2;
 
     public Guid Id { get; private set; } 
     public VehicleMake Make { get; private set; } 
@@ -84,8 +85,9 @@ public class VehicleModel
         name = name.Trim(' ', '\t', '\n');
         description = description?.Trim(' ', '\t', '\n');
 
-        if (name.Length > MAX_NAME_LENGTH)
-            throw new CommonCoreException($"Invalid name, the max length is '{MAX_NAME_LENGTH}'.");
+        if (name.Length > MAX_DESCRIPTION_LENGTH ||
+            name.Length < MIN_NAME_LENGTH)
+            throw new CommonCoreException($"Invalid name, the string length is '{MIN_NAME_LENGTH}' to '{MAX_NAME_LENGTH}'.");
 
         if (description is not null &&
             description.Length > MAX_DESCRIPTION_LENGTH)
