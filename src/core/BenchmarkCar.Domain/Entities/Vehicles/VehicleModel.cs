@@ -15,7 +15,7 @@ public class VehicleModel
     public object ExternalId { get; private set; }
     public DateTimeOffset InsertedAt { get; private set; }
 
-    public VehicleModel(Guid id, VehicleMake vehicleMake, string name, string normalizedName, string? description, object externalId, DateTimeOffset insertedAt)
+    private VehicleModel(Guid id, VehicleMake vehicleMake, string name, string normalizedName, string? description, object externalId, DateTimeOffset insertedAt)
     {
         Id = id;
         Make = vehicleMake;
