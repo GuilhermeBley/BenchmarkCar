@@ -6,9 +6,9 @@ namespace BenchmarkCar.Domain.Entities.Vehicles;
 public class ModelEngine
     : Entity
 {
-    public Guid ModelId { get; set; }
-    public object ExternalId { get; set; }
-    public DateTimeOffset InsertedAt { get; set; }
+    public Guid ModelId { get; private set; }
+    public object ExternalId { get; private set; }
+    public DateTimeOffset InsertedAt { get; private set; }
 
     /// <summary>
     /// Vehicle valves
