@@ -32,8 +32,33 @@ public class ModelEngine
     ///     </para>
     /// </remarks>
     public decimal? HorsePowerHp { get; private set; }
+
+    /// <summary>
+    /// engine's power output at a specific engine speed or revolutions per minute
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///     In the context of vehicles, horsepower represents the engine's capability to perform work, 
+    ///     specifically the power output of the engine.
+    ///     "Horsepower at RPM" refers to the measurement of the engine's power output at a specific engine speed or revolutions per minute (RPM).
+    ///     </para>
+    /// </remarks>
     public decimal? HorsePowerRpm { get; private set; }
+
+    /// <summary>
+    /// "Torque in ft-lbs" refers to the engine's twisting force, indicating how much rotational force it can apply at a specific point on the crankshaft
+    /// </summary>
+    /// <remarks>
+    ///     <para>
+    ///     Torque, measured in foot-pounds (ft-lbs) or Newton-meters (Nm), is a crucial aspect of an engine's performance. Torque represents the 
+    ///     rotational force produced by the engine and is often mentioned alongside horsepower to provide a comprehensive view of an engine's capabilities.
+    ///     </para>
+    /// </remarks>
     public decimal? TorqueFtLbs { get; private set; }
+
+    /// <summary>
+    /// The same of <see cref="TorqueFtLbs"/>, but the way to measure is in speed or revolutions per minute
+    /// </summary>
     public decimal? TorqueRpm { get; private set; }
 
     private ModelEngine(
