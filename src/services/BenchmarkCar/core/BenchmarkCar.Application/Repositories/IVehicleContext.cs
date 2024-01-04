@@ -3,11 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BenchmarkCar.Application.Repositories;
 
-public interface IVehicleContext
+public abstract class IVehicleContext
+    : DbContext
 {
-    DbSet<VehicleMakeModel> VehiclesMakes { get; }
-    DbSet<VehicleModelModel> VehiclesModels { get; }
-    DbSet<BestModelModel> BestModels { get; }
-    DbSet<ModelBodyModel> ModelBodies { get; }
-    DbSet<ModelEngineModel> EngineModels { get; }
+    public abstract DbSet<VehicleMakeModel> VehiclesMakes { get; }
+    public abstract DbSet<VehicleModelModel> VehiclesModels { get; }
+    public abstract DbSet<BestModelModel> BestModels { get; }
+    public abstract DbSet<ModelBodyModel> ModelBodies { get; }
+    public abstract DbSet<ModelEngineModel> EngineModels { get; }
 }
