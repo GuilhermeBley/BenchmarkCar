@@ -1,6 +1,10 @@
 ﻿namespace BenchmarkCar.Application.Commands.CreateVehicleMake;
 
-public class CreateVehicleMakeResponse
-
+public record CreateVehicleMakeResponse(
+    Guid Id,
+    string NormalizedName,
+    string Name,
+    string ExternalId,
+    DateTimeOffset InsertedAt)
 {
 }

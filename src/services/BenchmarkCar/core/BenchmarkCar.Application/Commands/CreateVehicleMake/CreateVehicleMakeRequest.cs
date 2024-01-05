@@ -2,7 +2,7 @@
 
 namespace BenchmarkCar.Application.Commands.CreateVehicleMake;
 
-public class CreateVehicleMakeRequest
-    : IRequest<CreateVehicleMakeResponse>
-{
-}
+public record CreateVehicleMakeRequest
+    (string Name,
+    string ExternalId)
+    : IRequest<CreateVehicleMakeResponse>;
