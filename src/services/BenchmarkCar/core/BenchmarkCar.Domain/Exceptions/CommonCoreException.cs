@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace BenchmarkCar.Domain.Exceptions;
 
-internal class CommonCoreException
+public class CommonCoreException
     : CoreException
 {
     public const string DefaultMessage = "BadRequest";
