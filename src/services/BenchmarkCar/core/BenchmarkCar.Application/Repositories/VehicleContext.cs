@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BenchmarkCar.Application.Repositories;
 
-public abstract class IVehicleContext
+public abstract class VehicleContext
     : DbContext
 {
     public abstract DbSet<VehicleMakeModel> VehiclesMakes { get; }
