@@ -7,6 +7,7 @@ public class VehicleModelModel
     public Guid Id { get; set; }
     public Guid VehicleMakeId { get; set; }
     public string Name { get; set; } = string.Empty;
+    public int Year { get; set; }
     public string NormalizedName { get; set; } = string.Empty;
     public string? Description { get; set; }
     public string ExternalId { get; set; } = string.Empty;
@@ -20,6 +21,7 @@ public class VehicleModelModel
             Name = entity.Name,
             NormalizedName = entity.NormalizedName,
             Id = entity.Id,
+            Year = entity.Year,
             InsertedAt = entity.InsertedAt,
             VehicleMakeId = entity.Make.Id
         };

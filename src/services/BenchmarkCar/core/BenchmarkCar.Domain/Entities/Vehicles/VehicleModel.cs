@@ -5,17 +5,28 @@ public class VehicleModel
 {
     private const int MAX_DESCRIPTION_LENGTH = 5000;
     private const int MAX_NAME_LENGTH = 255;
+    private const int MAX_NORMALIZED_NAME_LENGTH = 255;
     private const int MIN_NAME_LENGTH = 2;
+    private static int MaxModelYear 
+        => DateTime.UtcNow.Year + 1;
 
     public Guid Id { get; private set; } 
     public VehicleMake Make { get; private set; } 
     public string Name { get; private set; }
+    public int Year { get; private set; }
     public string NormalizedName { get; private set; }
     public string? Description { get; private set; }
     public object ExternalId { get; private set; }
     public DateTimeOffset InsertedAt { get; private set; }
 
-    private VehicleModel(Guid id, VehicleMake vehicleMake, string name, string normalizedName, string? description, object externalId, DateTimeOffset insertedAt)
+    private VehicleModel(
+        Guid id, 
+        VehicleMake vehicleMake, 
+        string name, 
+        string normalizedName, 
+        string? description, 
+        object externalId, 
+        DateTimeOffset insertedAt, int year)
     {
         Id = id;
         Make = vehicleMake;
@@ -24,6 +35,7 @@ public class VehicleModel
         Description = description;
         ExternalId = externalId;
         InsertedAt = insertedAt;
+        Year = year;
     }
 
     public override bool Equals(object? obj)
@@ -58,12 +70,14 @@ public class VehicleModel
     public static VehicleModel CreateNow(
         VehicleMake vehicleMake,
         string name,
+        int year,
         string? description,
         object externalId)
         => Create(
             Guid.NewGuid(),
             vehicleMake,
             name,
+            year,
             description,
             externalId,
             DateTimeOffset.UtcNow);
@@ -72,6 +86,7 @@ public class VehicleModel
         Guid id, 
         VehicleMake vehicleMake, 
         string name, 
+        int year, 
         string? description, 
         object externalId, 
         DateTimeOffset insertedAt)
@@ -96,10 +111,24 @@ public class VehicleModel
         if (externalId is null)
             throw new CommonCoreException("Invalid externalId, it isn't allowed null.");
 
+        if (year > MaxModelYear)
+            throw new CommonCoreException("Invalid model year.");
+
+        var normalizedName = string.Concat(
+            vehicleMake.NormalizedName,
+            '-',
+            name.ToUpperInvariant(),
+            '-',
+            year);
+
+        if (normalizedName.Length > MAX_NORMALIZED_NAME_LENGTH)
+            throw new CommonCoreException("Too long normalized name.");
+
         return new VehicleModel(
             id: id,
             vehicleMake: vehicleMake,
             name: name,
+            year: year,
             normalizedName: name.ToUpperInvariant(),
             description: description,
             externalId: externalId,
