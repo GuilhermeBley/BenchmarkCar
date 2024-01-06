@@ -7,5 +7,6 @@ public record CreateVehicleModelRequest(
     VehicleMakeModel VehicleMake,
     string Name,
     string ExternalId,
+    int Year,
     string? Description = null)
     : IRequest<CreateVehicleModelResponse>;

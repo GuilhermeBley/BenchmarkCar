@@ -25,6 +25,7 @@ public class CreateVehicleModelHandler
         var vehicleModel = VehicleModel.CreateNow(
             vehicleMake, 
             request.Name, 
+            request.Year,
             request.Description, 
             request.ExternalId);
 
