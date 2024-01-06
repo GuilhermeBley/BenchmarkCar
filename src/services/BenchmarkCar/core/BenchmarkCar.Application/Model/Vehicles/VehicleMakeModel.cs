@@ -10,6 +10,13 @@ public  class VehicleMakeModel
     public string ExternalId { get; set; } = string.Empty;
     public DateTimeOffset InsertedAt { get; set; }
 
+    public VehicleMake MapToEntity()
+        => VehicleMake.Create(
+            id: Id,
+            name: Name,
+            externalId: ExternalId,
+            insertedAt: InsertedAt);
+
     public static VehicleMakeModel MapFromEntity(VehicleMake entity)
         => new()
         {
