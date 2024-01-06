@@ -5,7 +5,7 @@ public class VehicleModel
 {
     private const int MAX_DESCRIPTION_LENGTH = 5000;
     private const int MAX_NAME_LENGTH = 255;
-    private const int MAX_NORMALIZED_NAME_LENGTH = 255;
+    private const int MAX_NORMALIZED_NAME_LENGTH = 500;
     private const int MIN_NAME_LENGTH = 2;
     private static int MaxModelYear 
         => DateTime.UtcNow.Year + 1;
