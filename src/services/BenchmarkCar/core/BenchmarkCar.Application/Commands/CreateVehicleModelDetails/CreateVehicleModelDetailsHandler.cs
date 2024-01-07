@@ -12,6 +12,9 @@ namespace BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 /// <remarks>
 ///     <para>Try add model to best models.</para>
 /// </remarks>
+/// <exception cref="ConflictCoreException"></exception>
+/// <exception cref="NotFoundCoreException"></exception>
+/// <exception cref="CommonCoreException"></exception>
 public class CreateVehicleModelDetailsHandler
     : IRequestHandler<CreateVehicleModelDetailsRequest, CreateVehicleModelDetailsResponse>
 {
