@@ -2,6 +2,7 @@
 using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.Domain.Entities.Vehicles;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 
@@ -36,10 +37,14 @@ public class CreateVehicleModelDetailsHandler
         ModelBody? modelBody = null;
 
         if (request.Engine is not null)
-            modelEngine = MapEngine(request.Engine);
+            modelEngine = MapEngine(request.Vehicle.Id, request.Engine);
 
         if (request.Body is not null)
-            modelBody = MapBody(request.Body);
+            modelBody = MapBody(request.Vehicle.Id, request.Body);
+
+        var vehicleFound =
+            await _vehicleContext.VehiclesModels.FirstOrDefaultAsync(v => v.Id == request.Vehicle.Id)
+            ?? throw new NotFoundCoreException($"Vehicle model with id '{request.Vehicle.Id}' was not found.");
 
         await using var transaction =
             await _vehicleContext.Database.BeginTransactionAsync(cancellationToken);
@@ -49,11 +54,15 @@ public class CreateVehicleModelDetailsHandler
 
         if (modelEngine is not null)
         {
+            await ThrowIfAlreadyContainsModelEngineAsync(vehicleFound.Id);
+
             engineModelCreated = (await _vehicleContext.EngineModels.AddAsync(ModelEngineModel.MapFromEntity(modelEngine))).Entity;
         }
 
         if (modelBody is not null)
         {
+            await ThrowIfAlreadyContainsModelBodyAsync(vehicleFound.Id);
+
             bodyModelCreated = (await _vehicleContext.ModelBodies.AddAsync(ModelBodyModel.MapFromEntity(modelBody))).Entity;
         }
 
@@ -64,4 +73,45 @@ public class CreateVehicleModelDetailsHandler
             EngineIdCreatedOrUpdated: engineModelCreated?.ModelId,
             BodyIdCreatedOrUpdated: engineModelCreated?.ModelId);
     }
+
+    private async Task ThrowIfAlreadyContainsModelEngineAsync(Guid modelId)
+    {
+        var vehicleFound = await _vehicleContext.EngineModels
+            .FirstOrDefaultAsync(v => v.ModelId == modelId);
+
+        if (vehicleFound is not null)
+            throw new ConflictCoreException($"Engine with id '{modelId}' already exists.");
+    }
+
+    private async Task ThrowIfAlreadyContainsModelBodyAsync(Guid modelId)
+    {
+        var vehicleFound = await _vehicleContext.ModelBodies
+            .FirstOrDefaultAsync(v => v.ModelId == modelId);
+
+        if (vehicleFound is not null)
+            throw new ConflictCoreException($"Body with id '{modelId}' already exists.");
+    }
+
+
+    private static ModelBody MapBody(Guid modelId, CreateBodyModel model)
+        => ModelBody.Create(
+            modelId: modelId,
+            externalId: model.ExternalId,
+            insertedAt: DateTimeOffset.UtcNow,
+            doors: model.Door,
+            seats: model.Seats,
+            length: model.Length,
+            width: model.Width,
+            engineSize: model.EngineSize);
+
+    private static ModelEngine MapEngine(Guid modelId, CreateEngineModel model)
+        => ModelEngine.Create(
+            modelId: modelId,
+            insertedAt: DateTimeOffset.UtcNow,
+            externalId: model.ExternalId,
+            valves: model.Valves,
+            horsePowerHp: model.HorsePowerHp,
+            horsePowerRpm: model.HorsePowerRpm,
+            torqueFtLbs: model.TorqueFtLbs,
+            torqueRpm: model.TorqueRpm);
 }
