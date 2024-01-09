@@ -6,9 +6,9 @@ namespace BenchmarkCar.Application.Repositories;
 public abstract class VehicleContext
     : DbContext
 {
-    public abstract DbSet<VehicleMakeModel> VehiclesMakes { get; }
-    public abstract DbSet<VehicleModelModel> VehiclesModels { get; }
-    public abstract DbSet<BestModelModel> BestModels { get; }
-    public abstract DbSet<ModelBodyModel> ModelBodies { get; }
-    public abstract DbSet<ModelEngineModel> EngineModels { get; }
+    public abstract DbSet<VehicleMakeModel> VehiclesMakes { get; set; }
+    public abstract DbSet<VehicleModelModel> VehiclesModels { get; set; }
+    public abstract DbSet<BestModelModel> BestModels { get; set; }
+    public abstract DbSet<ModelBodyModel> ModelBodies { get; set; }
+    public abstract DbSet<ModelEngineModel> EngineModels { get; set; }
 }
