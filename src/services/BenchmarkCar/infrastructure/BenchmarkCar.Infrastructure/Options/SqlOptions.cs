@@ -1,6 +1,6 @@
 ﻿namespace BenchmarkCar.Infrastructure.Options;
 
-internal class MysqlOptions
+internal class SqlOptions
 {
     public string ConnectionString { get; init; } = string.Empty;
 }

@@ -11,7 +11,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.26" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
 	</ItemGroup>

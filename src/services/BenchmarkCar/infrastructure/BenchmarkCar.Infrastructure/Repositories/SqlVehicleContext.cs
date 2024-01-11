@@ -7,11 +7,11 @@ using Microsoft.Extensions.Options;
 
 namespace BenchmarkCar.Infrastructure.Repositories;
 
-internal class MySqlVehicleContext
+internal class SqlVehicleContext
     : VehicleContext
 {
-    private readonly ILogger<MySqlVehicleContext> _logger;
-    private IOptions<MysqlOptions> _options;
+    private readonly ILogger<SqlVehicleContext> _logger;
+    private IOptions<SqlOptions> _options;
 
     public override DbSet<VehicleMakeModel> VehiclesMakes { get; set; } = null!;
 
@@ -23,9 +23,9 @@ internal class MySqlVehicleContext
 
     public override DbSet<ModelEngineModel> EngineModels { get; set; } = null!;
 
-    public MySqlVehicleContext(
-        ILogger<MySqlVehicleContext> logger,
-        IOptions<Options.MysqlOptions> options)
+    public SqlVehicleContext(
+        ILogger<SqlVehicleContext> logger,
+        IOptions<Options.SqlOptions> options)
     {
         _logger = logger;
         _options = options;
@@ -35,10 +35,9 @@ internal class MySqlVehicleContext
     {
         base.OnConfiguring(optionsBuilder);
 
-        optionsBuilder.UseMySql(
-            _options.Value.ConnectionString,
-            serverVersion: ServerVersion.AutoDetect(_options.Value.ConnectionString),
-            config =>
+        optionsBuilder.UseSqlServer(
+            connectionString: _options.Value.ConnectionString,
+            opt =>
             {
             });
     }
