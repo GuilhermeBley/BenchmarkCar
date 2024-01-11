@@ -9,6 +9,8 @@ public class VehicleModel
     private const int MIN_NAME_LENGTH = 2;
     private static int MaxModelYear 
         => DateTime.UtcNow.Year + 1;
+    private static int MinModelYear 
+        => DateTime.MinValue.Year;
 
     public Guid Id { get; private set; } 
     public VehicleMake Make { get; private set; } 
@@ -111,7 +113,8 @@ public class VehicleModel
         if (externalId is null)
             throw new CommonCoreException("Invalid externalId, it isn't allowed null.");
 
-        if (year > MaxModelYear)
+        if (year > MaxModelYear ||
+            year < MinModelYear)
             throw new CommonCoreException("Invalid model year.");
 
         var normalizedName = string.Concat(
