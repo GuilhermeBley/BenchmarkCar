@@ -25,6 +25,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventBus", "EventBus", "{44
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkCar.EventBus", "src\BuildingBlocks\EventBus\BenchmarkCar.EventBus\BenchmarkCar.EventBus.csproj", "{61673962-0C3A-4920-AC12-61913624DC87}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkCar.EventBus.Azure", "src\BuildingBlocks\EventBus\BenchmarkCar.EventBus.Azure\BenchmarkCar.EventBus.Azure.csproj", "{9BFE1E5D-EC6A-4165-839B-99624F5EBF90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{61673962-0C3A-4920-AC12-61913624DC87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61673962-0C3A-4920-AC12-61913624DC87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61673962-0C3A-4920-AC12-61913624DC87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BFE1E5D-EC6A-4165-839B-99624F5EBF90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BFE1E5D-EC6A-4165-839B-99624F5EBF90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BFE1E5D-EC6A-4165-839B-99624F5EBF90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BFE1E5D-EC6A-4165-839B-99624F5EBF90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{66C4CED5-2091-42F7-9847-A6DC64BCCD7F} = {C20098EC-98EA-475B-BA2C-DEAA07453E79}
@@ -62,5 +68,6 @@ Global
 		{55F979C3-74E4-4442-89F9-E01381464438} = {C20098EC-98EA-475B-BA2C-DEAA07453E79}
 		{44309881-6A56-4D13-A1A5-6F8565E66DD8} = {55F979C3-74E4-4442-89F9-E01381464438}
 		{61673962-0C3A-4920-AC12-61913624DC87} = {44309881-6A56-4D13-A1A5-6F8565E66DD8}
+		{9BFE1E5D-EC6A-4165-839B-99624F5EBF90} = {44309881-6A56-4D13-A1A5-6F8565E66DD8}
 	EndGlobalSection
 EndGlobal
