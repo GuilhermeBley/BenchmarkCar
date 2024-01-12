@@ -33,7 +33,10 @@ public class RequestVehicleMakeCreationHandler
         await _eventBus.PublishAsync(@event);
 
         var vehicleCount =
-            await _vehicleContext.VehiclesMakes.CountAsync();
+            await _vehicleContext
+            .VehiclesMakes
+            .AsNoTracking()
+            .CountAsync();
 
         return new RequestVehicleMakeCreationResponse(vehicleCount);
     }
