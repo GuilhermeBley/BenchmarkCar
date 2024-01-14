@@ -9,6 +9,8 @@ public static class ApplicationServicesDiExtension
         this IServiceCollection serviceCollection,
         IConfiguration configuration)
     {
+        serviceCollection.AddLogging();
+
         serviceCollection.AddDbContextPool<Repositories.SqlVehicleContext>(opt =>
         {
         });
@@ -17,6 +19,8 @@ public static class ApplicationServicesDiExtension
 
         serviceCollection.AddSingleton<Application.Log.ICoreLogger, Log.InfrastructureLogger>();
         serviceCollection.AddSingleton(typeof(Application.Log.ICoreLogger<>), typeof(Log.InfrastructureLogger<>));
+
+        serviceCollection.AddSingleton<Application.ExternalApi.IVehiclesDataQuery, ExternalApi.CarApiVehiclesDataQuery>();
 
         return serviceCollection;
     }

@@ -1,10 +1,10 @@
-﻿using BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
+﻿using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
 
 namespace BenchmarkCar.Application.ExternalApi;
 
 public interface IVehiclesDataQuery
 {
-    Task<CreateVehicleModelDetailsRequest> GetByExternalModelId(
+    Task<CreateVehicleModelApiDetails> GetByExternalModelId(
         object modelId, 
         CancellationToken cancellationToken = default);
 }
