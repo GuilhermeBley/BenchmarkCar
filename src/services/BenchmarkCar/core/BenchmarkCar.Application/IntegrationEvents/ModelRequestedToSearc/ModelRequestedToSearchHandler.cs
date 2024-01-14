@@ -13,9 +13,9 @@ public class ModelRequestedToSearchHandler
     : IIntegrationEventHandler<CreateModelIntegrationEvent>
 {
     private readonly IMediator _mediator;
-    public readonly IVehiclesDataQuery _vehicleQuery;
-    public readonly VehicleContext _vehicleContext;
-    public readonly ICoreLogger _logger;
+    private readonly IVehiclesDataQuery _vehicleQuery;
+    private readonly VehicleContext _vehicleContext;
+    private readonly ICoreLogger _logger;
 
     public ModelRequestedToSearchHandler(
         IMediator mediator,
