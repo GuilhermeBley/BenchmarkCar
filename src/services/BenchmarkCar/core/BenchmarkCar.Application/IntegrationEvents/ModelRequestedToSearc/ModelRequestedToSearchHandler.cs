@@ -1,53 +1,82 @@
-﻿using BenchmarkCar.Application.Model.Vehicles;
+﻿using BenchmarkCar.Application.ExternalApi;
+using BenchmarkCar.Application.Model.Vehicles;
 using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.Domain.Entities.Vehicles;
+using BenchmarkCar.EventBus.Abstractions;
+using BenchmarkCar.EventBus.Events;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
+namespace BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
 
-/// <summary>
-/// Add a new vehicle model details, the data is about model and engine.
-/// </summary>
-/// <remarks>
-///     <para>Try add model to best models.</para>
-/// </remarks>
-/// <exception cref="ConflictCoreException"></exception>
-/// <exception cref="NotFoundCoreException"></exception>
-/// <exception cref="CommonCoreException"></exception>
-public class CreateVehicleModelDetailsHandler
-    : IRequestHandler<CreateVehicleModelDetailsRequest, CreateVehicleModelDetailsResponse>
+public class ModelRequestedToSearchHandler
+    : IIntegrationEventHandler<CreateModelIntegrationEvent>
 {
-    private readonly VehicleContext _vehicleContext;
+    private readonly IMediator _mediator;
+    public readonly IVehiclesDataQuery _vehicleQuery;
+    public readonly VehicleContext _vehicleContext;
+    public readonly ICoreLogger _logger;
 
-    public CreateVehicleModelDetailsHandler(
-        VehicleContext vehicleContext)
+    public ModelRequestedToSearchHandler(
+        IMediator mediator,
+        IVehiclesDataQuery vehicleQuery, 
+        VehicleContext vehicleContext, 
+        ICoreLogger<ModelRequestedToSearchHandler> logger)
     {
+        _mediator = mediator;
+        _vehicleQuery = vehicleQuery;
         _vehicleContext = vehicleContext;
+        _logger = logger;
     }
 
-    public async Task<CreateVehicleModelDetailsResponse> Handle(
-        CreateVehicleModelDetailsRequest request, 
-        CancellationToken cancellationToken)
+    public async Task Handle(
+        CreateModelIntegrationEvent @event, 
+        CancellationToken cancellationToken = default)
     {
-        if (request.Engine is null &&
-            request.Body is null)
-            return CreateVehicleModelDetailsResponse.Default;
+        _logger.LogTrace("Trying to get '{0}' data details.", @event.ModelId);
 
-        var vehicleModel = request.Vehicle.MapToEntity();
+        var engineData = await _vehicleContext.EngineModels
+            .AsNoTracking()
+            .Where(m => m.ModelId == @event.ModelId)
+            .FirstOrDefaultAsync();
+
+        if (engineData is not null)
+        {
+            _logger.LogInformation("Engine model '{0}' already added.", @event.ModelId);
+            return;
+        }
+
+        var model = await _vehicleContext.VehiclesModels
+            .AsNoTracking()
+            .Where(m => m.Id == @event.ModelId)
+            .FirstOrDefaultAsync();
+
+        if (model is null)
+        {
+            _logger.LogInformation("Model '{0}' not found.", @event.ModelId);
+            return;
+        }
+
+        var apiResult = await _vehicleQuery.GetByExternalModelId(modelId: @event.ModelId);
+
+        if (apiResult.Engine is null &&
+            apiResult.Body is null)
+            throw new CommonCoreException("Invalid engine or body.");
+
+        var vehicleModel = apiResult.Vehicle.MapToEntity();
 
         ModelEngine? modelEngine = null;
         ModelBody? modelBody = null;
 
-        if (request.Engine is not null)
-            modelEngine = MapEngine(request.Vehicle.Id, request.Engine);
+        if (apiResult.Engine is not null)
+            modelEngine = MapEngine(apiResult.Vehicle.Id, apiResult.Engine);
 
-        if (request.Body is not null)
-            modelBody = MapBody(request.Vehicle.Id, request.Body);
+        if (apiResult.Body is not null)
+            modelBody = MapBody(apiResult.Vehicle.Id, apiResult.Body);
 
         var vehicleFound =
-            await _vehicleContext.VehiclesModels.FirstOrDefaultAsync(v => v.Id == request.Vehicle.Id)
-            ?? throw new NotFoundCoreException($"Vehicle model with id '{request.Vehicle.Id}' was not found.");
+            await _vehicleContext.VehiclesModels.FirstOrDefaultAsync(v => v.Id == apiResult.Vehicle.Id)
+            ?? throw new NotFoundCoreException($"Vehicle model with id '{apiResult.Vehicle.Id}' was not found.");
 
         await using var transaction =
             await _vehicleContext.Database.BeginTransactionAsync(cancellationToken);
@@ -71,10 +100,6 @@ public class CreateVehicleModelDetailsHandler
 
         await transaction.CommitAsync(cancellationToken);
         await _vehicleContext.SaveChangesAsync(cancellationToken);
-
-        return new CreateVehicleModelDetailsResponse(
-            EngineIdCreatedOrUpdated: engineModelCreated?.ModelId,
-            BodyIdCreatedOrUpdated: engineModelCreated?.ModelId);
     }
 
     private async Task ThrowIfAlreadyContainsModelEngineAsync(Guid modelId)
@@ -94,7 +119,6 @@ public class CreateVehicleModelDetailsHandler
         if (vehicleFound is not null)
             throw new ConflictCoreException($"Body with id '{modelId}' already exists.");
     }
-
 
     private static ModelBody MapBody(Guid modelId, CreateBodyModel model)
         => ModelBody.Create(

@@ -37,7 +37,7 @@ public class RequestVehicleModelCreationHandler
 
         var @event = new CreateModelIntegrationEvent()
         {
-            MakeId = request.MakeId
+            ModelId = request.MakeId
         };
 
         await _eventBus.PublishAsync(@event);

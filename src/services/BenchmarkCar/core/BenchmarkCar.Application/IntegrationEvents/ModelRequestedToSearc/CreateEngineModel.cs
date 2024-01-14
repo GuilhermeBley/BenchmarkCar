@@ -1,4 +1,4 @@
-﻿namespace BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
+﻿namespace BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
 
 public record CreateEngineModel(
     string ExternalId,
