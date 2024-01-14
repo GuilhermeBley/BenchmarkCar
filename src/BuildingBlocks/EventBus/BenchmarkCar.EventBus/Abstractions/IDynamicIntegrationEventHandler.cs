@@ -2,5 +2,5 @@
 
 public interface IDynamicIntegrationEventHandler
 {
-    Task Handle(dynamic eventData);
+    Task Handle(dynamic eventData, CancellationToken cancellationToken = default);
 }

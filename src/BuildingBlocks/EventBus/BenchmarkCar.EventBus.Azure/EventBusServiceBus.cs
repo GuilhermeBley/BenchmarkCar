@@ -146,7 +146,7 @@ internal class EventBusServiceBus : IEventBus
         return Task.CompletedTask;
     }
 
-    private async Task<bool> ProcessEvent(string eventName, string message)
+    private async Task<bool> ProcessEvent(string eventName, string message, CancellationToken cancellationToken = default)
     {
         var processed = false;
         if (_subsManager.HasSubscriptionsForEvent(eventName))
@@ -161,7 +161,7 @@ internal class EventBusServiceBus : IEventBus
                         var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, subscription.HandlerType) as IDynamicIntegrationEventHandler;
                         if (handler == null) continue;
                         dynamic? eventData = JsonSerializer.Deserialize<dynamic>(message);
-                        await handler.Handle(eventData);
+                        await handler.Handle(eventData, cancellationToken);
                     }
                     else
                     {
@@ -173,7 +173,7 @@ internal class EventBusServiceBus : IEventBus
                         if (integrationEvent is null) continue;
                         var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                         var tsk = concreteType?.GetMethod(nameof(IIntegrationEventHandler<IntegrationEvent>.Handle))?
-                            .Invoke(handler, new object[] { integrationEvent }) as Task;
+                            .Invoke(handler, new object[] { integrationEvent, cancellationToken }) as Task;
                         if (tsk is not null)
                             await tsk.ConfigureAwait(false);
                     }
