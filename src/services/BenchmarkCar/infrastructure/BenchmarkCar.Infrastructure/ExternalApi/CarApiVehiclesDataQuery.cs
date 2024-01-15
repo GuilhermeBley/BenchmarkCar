@@ -1,5 +1,6 @@
 ﻿using BenchmarkCar.Application.ExternalApi;
 using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
+using BenchmarkCar.Infrastructure.Model.CarApi;
 using BenchmarkCar.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
@@ -46,7 +47,7 @@ internal class CarApiVehiclesDataQuery
     }
 
     public async Task<CreateVehicleModelApiDetails> GetByExternalModelId(
-        object modelId, 
+        object modelId,
         CancellationToken cancellationToken = default)
     {
         if (!(modelId is string modelTextId))
@@ -58,7 +59,20 @@ internal class CarApiVehiclesDataQuery
 
         await _loginSession.EnsureClientLoggedAsync(cancellationToken);
 
+        const string PATH = "api/trims/{id}";
 
+        using var response
+            = await _httpClient.GetAsync(PATH, cancellationToken);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Failed to get data. Staus: {response.StatusCode}, Body: {body}");
+        }
+
+        var internalModelBody = await response.Content.ReadFromJsonAsync<VehicleTrimResponse>();
+
+        return new CreateVehicleModelApiDetails()
     }
 
     /// <summary>
@@ -82,7 +96,7 @@ internal class CarApiVehiclesDataQuery
         {
             var token = await GetTokenAsync(cancellationToken);
 
-            _httpClient.DefaultRequestHeaders.Authorization 
+            _httpClient.DefaultRequestHeaders.Authorization
                 = new System.Net.Http.Headers.AuthenticationHeaderValue(
                     "Bearer",
                     token);
@@ -97,7 +111,7 @@ internal class CarApiVehiclesDataQuery
                 return _lastToken;
 
             using var result = await _httpClient.PostAsJsonAsync(
-                PATH, 
+                PATH,
                 new
                 {
                     api_token = _options.Value.ApiToken,
@@ -106,7 +120,7 @@ internal class CarApiVehiclesDataQuery
                 cancellationToken);
 
             result.EnsureSuccessStatusCode();
-            
+
             return await result.Content.ReadAsStringAsync();
         }
 
