@@ -70,7 +70,13 @@ internal class CarApiVehiclesDataQuery
             throw new HttpRequestException($"Failed to get data. Staus: {response.StatusCode}, Body: {body}");
         }
 
-        var internalModelBody = await response.Content.ReadFromJsonAsync<VehicleTrimResponse>();
+        var apiModel = await response.Content.ReadFromJsonAsync<VehicleTrimResponse>();
+
+        var internalBodyModel = apiModel?.MakeModelTrimBody?.MapToModel();
+
+        ArgumentNullException.ThrowIfNull(internalBodyModel, nameof(internalBodyModel));
+
+        // needs to update engine size
 
         return new CreateVehicleModelApiDetails()
     }

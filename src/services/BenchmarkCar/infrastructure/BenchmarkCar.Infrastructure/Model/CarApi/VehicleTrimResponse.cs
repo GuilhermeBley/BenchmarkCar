@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
+using System.Text.Json.Serialization;
 
 namespace BenchmarkCar.Infrastructure.Model.CarApi;
 
@@ -82,6 +83,14 @@ public class MakeModelTrimBody
 
     [JsonPropertyName("max_towing_capacity")]
     public int MaxTowingCapacity { get; set; }
+
+    public CreateBodyModel MapToModel()
+        => new CreateBodyModel(
+            ExternalId: Id.ToString(),
+            Door: Doors,
+            Length: Length,
+            Seats: Seats,
+            Width: Width);
 }
 
 public class MakeModelTrimEngine
