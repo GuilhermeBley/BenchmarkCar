@@ -84,7 +84,7 @@ public class MakeModelTrimBody
     [JsonPropertyName("max_towing_capacity")]
     public int MaxTowingCapacity { get; set; }
 
-    public CreateBodyModel MapToModel()
+    public CreateBodyModel MapToCreateBodyModel()
         => new CreateBodyModel(
             ExternalId: Id.ToString(),
             Door: Doors,
@@ -139,6 +139,15 @@ public class MakeModelTrimEngine
 
     [JsonPropertyName("transmission")]
     public string? Transmission { get; set; }
+
+    public CreateEngineModel MapToCreateEngineModel()
+        => new CreateEngineModel(
+            ExternalId: Id.ToString(),
+            Valves: Valves,
+            HorsePowerHp: HorsepowerHp,
+            HorsePowerRpm: HorsepowerRpm,
+            TorqueFtLbs: TorqueFtLbs,
+            TorqueRpm: TorqueRpm);
 }
 
 public class MakeModelTrimExteriorColor

@@ -4,7 +4,6 @@ using BenchmarkCar.Infrastructure.Model.CarApi;
 using BenchmarkCar.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace BenchmarkCar.Infrastructure.ExternalApi;
@@ -72,13 +71,17 @@ internal class CarApiVehiclesDataQuery
 
         var apiModel = await response.Content.ReadFromJsonAsync<VehicleTrimResponse>();
 
-        var internalBodyModel = apiModel?.MakeModelTrimBody?.MapToModel();
+        var createBodyModel = apiModel?.MakeModelTrimBody?.MapToCreateBodyModel();
 
-        ArgumentNullException.ThrowIfNull(internalBodyModel, nameof(internalBodyModel));
+        ArgumentNullException.ThrowIfNull(createBodyModel, nameof(createBodyModel));
 
-        // needs to update engine size
+        var createEngineModel = apiModel?.MakeModelTrimEngine?.MapToCreateEngineModel();
 
-        return new CreateVehicleModelApiDetails()
+        ArgumentNullException.ThrowIfNull(createEngineModel, nameof(createEngineModel));
+
+        return new CreateVehicleModelApiDetails(
+            createBodyModel,
+            createEngineModel);
     }
 
     /// <summary>
