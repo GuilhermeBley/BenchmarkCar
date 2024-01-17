@@ -60,6 +60,7 @@ public class ModelEngine
     /// The same of <see cref="TorqueFtLbs"/>, but the way to measure is in speed or revolutions per minute
     /// </summary>
     public decimal? TorqueRpm { get; private set; }
+    public int? EngineSize { get; private set; }
 
     private ModelEngine(
         Guid modelId, 
@@ -69,7 +70,8 @@ public class ModelEngine
         decimal? horsePowerHp, 
         decimal? horsePowerRpm, 
         decimal? torqueFtLbs, 
-        decimal? torqueRpm)
+        decimal? torqueRpm,
+        int? engineSize)
     {
         ModelId = modelId;
         ExternalId = externalId;
@@ -79,6 +81,7 @@ public class ModelEngine
         HorsePowerRpm = horsePowerRpm;
         TorqueFtLbs = torqueFtLbs;
         TorqueRpm = torqueRpm;
+        EngineSize = engineSize;
     }
 
     public override bool Equals(object? obj)
@@ -93,7 +96,8 @@ public class ModelEngine
                HorsePowerHp == engine.HorsePowerHp &&
                HorsePowerRpm == engine.HorsePowerRpm &&
                TorqueFtLbs == engine.TorqueFtLbs &&
-               TorqueRpm == engine.TorqueRpm;
+               TorqueRpm == engine.TorqueRpm &&
+               EngineSize == engine.EngineSize;
     }
 
     public override int GetHashCode()
@@ -109,6 +113,7 @@ public class ModelEngine
         hash.Add(HorsePowerRpm);
         hash.Add(TorqueFtLbs);
         hash.Add(TorqueRpm);
+        hash.Add(EngineSize);
         return hash.ToHashCode();
     }
 
@@ -120,7 +125,8 @@ public class ModelEngine
         decimal? horsePowerHp,
         decimal? horsePowerRpm,
         decimal? torqueFtLbs,
-        decimal? torqueRpm)
+        decimal? torqueRpm,
+        int? engineSize)
         => Create(modelId: model.Id,
         externalId: externalId,
         insertedAt: insertedAt,
@@ -128,7 +134,8 @@ public class ModelEngine
         horsePowerHp: horsePowerHp,
         horsePowerRpm: horsePowerRpm,
         torqueFtLbs: torqueFtLbs,
-        torqueRpm: torqueRpm);
+        torqueRpm: torqueRpm,
+        engineSize: engineSize);
 
     public static ModelEngine Create(
         Guid modelId,
@@ -138,7 +145,8 @@ public class ModelEngine
         decimal? horsePowerHp,
         decimal? horsePowerRpm,
         decimal? torqueFtLbs,
-        decimal? torqueRpm)
+        decimal? torqueRpm,
+        int? engineSize)
     {
         if (valves < 0)
             throw new CommonCoreException("Invalid 'valves' number.");
@@ -166,7 +174,7 @@ public class ModelEngine
             horsePowerHp: horsePowerHp,
             horsePowerRpm: horsePowerRpm,
             torqueFtLbs: torqueFtLbs,
-            torqueRpm: torqueRpm);
-
+            torqueRpm: torqueRpm,
+            engineSize: engineSize);
     }
 }

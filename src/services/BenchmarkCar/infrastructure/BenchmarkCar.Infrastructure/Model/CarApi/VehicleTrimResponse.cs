@@ -1,4 +1,5 @@
 ﻿using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
+using BenchmarkCar.Domain.Entities;
 using System.Text.Json.Serialization;
 
 namespace BenchmarkCar.Infrastructure.Model.CarApi;
@@ -144,6 +145,7 @@ public class MakeModelTrimEngine
         => new CreateEngineModel(
             ExternalId: Id.ToString(),
             Valves: Valves,
+            EngineSize: Size,
             HorsePowerHp: HorsepowerHp,
             HorsePowerRpm: HorsepowerRpm,
             TorqueFtLbs: TorqueFtLbs,

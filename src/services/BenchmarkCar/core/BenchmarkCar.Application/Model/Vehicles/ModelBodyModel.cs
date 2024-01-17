@@ -18,7 +18,6 @@ public class ModelBodyModel
         {
             ModelId = entity.ModelId,
             Doors = entity.Doors,
-            EngineSize = entity.EngineSize,
             Seats = entity.Seats,
             Width = entity.Width,
             ExternalId = entity.ExternalId.ToString() ?? string.Empty,

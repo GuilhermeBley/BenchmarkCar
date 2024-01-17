@@ -63,20 +63,20 @@ public class ModelRequestedToSearchHandler
             apiResult.Body is null)
             throw new CommonCoreException("Invalid engine or body.");
 
-        var vehicleModel = apiResult.Vehicle.MapToEntity();
+        var vehicleModel = model.MapToEntity();
 
         ModelEngine? modelEngine = null;
         ModelBody? modelBody = null;
 
         if (apiResult.Engine is not null)
-            modelEngine = MapEngine(apiResult.Vehicle.Id, apiResult.Engine);
+            modelEngine = MapEngine(model.Id, apiResult.Engine);
 
         if (apiResult.Body is not null)
-            modelBody = MapBody(apiResult.Vehicle.Id, apiResult.Body);
+            modelBody = MapBody(model.Id, apiResult.Body);
 
         var vehicleFound =
-            await _vehicleContext.VehiclesModels.FirstOrDefaultAsync(v => v.Id == apiResult.Vehicle.Id)
-            ?? throw new NotFoundCoreException($"Vehicle model with id '{apiResult.Vehicle.Id}' was not found.");
+            await _vehicleContext.VehiclesModels.FirstOrDefaultAsync(v => v.Id == model.Id)
+            ?? throw new NotFoundCoreException($"Vehicle model with id '{model.Id}' was not found.");
 
         await using var transaction =
             await _vehicleContext.Database.BeginTransactionAsync(cancellationToken);
@@ -128,8 +128,7 @@ public class ModelRequestedToSearchHandler
             doors: model.Door,
             seats: model.Seats,
             length: model.Length,
-            width: model.Width,
-            engineSize: model.EngineSize);
+            width: model.Width);
 
     private static ModelEngine MapEngine(Guid modelId, CreateEngineModel model)
         => ModelEngine.Create(
@@ -140,5 +139,6 @@ public class ModelRequestedToSearchHandler
             horsePowerHp: model.HorsePowerHp,
             horsePowerRpm: model.HorsePowerRpm,
             torqueFtLbs: model.TorqueFtLbs,
-            torqueRpm: model.TorqueRpm);
+            torqueRpm: model.TorqueRpm,
+            engineSize: model.EngineSize);
 }

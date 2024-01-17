@@ -10,7 +10,6 @@ public class ModelBody
     public decimal? Length { get; private set; }
     public decimal? Width { get; private set; }
     public int Seats { get; private set; }
-    public decimal? EngineSize { get; private set; }
 
     private ModelBody(
         Guid modelId, 
@@ -19,8 +18,7 @@ public class ModelBody
         int doors, 
         decimal? length, 
         decimal? width, 
-        int seats, 
-        decimal? engineSize)
+        int seats)
     {
         ModelId = modelId;
         ExternalId = externalId;
@@ -29,7 +27,6 @@ public class ModelBody
         Length = length;
         Width = width;
         Seats = seats;
-        EngineSize = engineSize;
     }
 
     public override bool Equals(object? obj)
@@ -43,8 +40,7 @@ public class ModelBody
                Doors == body.Doors &&
                Length == body.Length &&
                Width == body.Width &&
-               Seats == body.Seats &&
-               EngineSize == body.EngineSize;
+               Seats == body.Seats;
     }
 
     public override int GetHashCode()
@@ -59,7 +55,6 @@ public class ModelBody
         hash.Add(Length);
         hash.Add(Width);
         hash.Add(Seats);
-        hash.Add(EngineSize);
         return hash.ToHashCode();
     }
 
@@ -95,7 +90,6 @@ public class ModelBody
             doors: doors,
             length: length,
             width: width,
-            seats: seats,
-            engineSize: engineSize);
+            seats: seats);
     }
 }
