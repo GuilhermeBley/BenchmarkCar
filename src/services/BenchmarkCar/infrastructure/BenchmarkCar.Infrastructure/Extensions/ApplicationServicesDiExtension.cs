@@ -20,6 +20,9 @@ public static class ApplicationServicesDiExtension
         serviceCollection.AddSingleton<Application.Log.ICoreLogger, Log.InfrastructureLogger>();
         serviceCollection.AddSingleton(typeof(Application.Log.ICoreLogger<>), typeof(Log.InfrastructureLogger<>));
 
+        serviceCollection.AddHttpClient<ExternalApi.CarApiVehiclesDataQuery>(
+            ExternalApi.CarApiVehiclesDataQuery.Configure);
+
         serviceCollection.AddSingleton<Application.ExternalApi.IVehiclesDataQuery, ExternalApi.CarApiVehiclesDataQuery>();
 
         return serviceCollection;
