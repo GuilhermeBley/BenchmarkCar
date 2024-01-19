@@ -1,4 +1,5 @@
 ﻿using BenchmarkCar.Application.ExternalApi;
+using BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
 using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
 using BenchmarkCar.Infrastructure.Model.CarApi;
 using BenchmarkCar.Infrastructure.Options;
@@ -82,6 +83,11 @@ internal class CarApiVehiclesDataQuery
         return new CreateVehicleModelApiDetails(
             createBodyModel,
             createEngineModel);
+    }
+
+    public IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync()
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
