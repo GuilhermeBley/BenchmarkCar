@@ -4,6 +4,7 @@ using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.Domain.Entities.Vehicles;
 using BenchmarkCar.EventBus.Abstractions;
 using BenchmarkCar.EventBus.Events;
+using Microsoft.EntityFrameworkCore;
 
 namespace BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
 
@@ -28,15 +29,29 @@ public class MakesRequestedToCreateHandler
         CreateMakesIntegrationEvent @event, 
         CancellationToken cancellationToken = default)
     {
-        await foreach (var item in _vehicleDataQuery.GetAllMakesAsync())
+        await foreach (var item in _vehicleDataQuery.GetAllMakesAsync()
+            .WithCancellation(cancellationToken))
             try
             {
                 var vehicleMakeEntity
                     = VehicleMake.Create(
-                        Guid.NewGuid(),
-                        "",
-                        externalId: "",
+                        id: Guid.NewGuid(),
+                        name: item.MakeName,
+                        externalId: item.MakeId,
                         insertedAt: DateTimeOffset.UtcNow);
+
+                var vehicleAlreadyAdded
+                    = await _vehicleContext
+                    .VehiclesMakes
+                    .AsNoTracking()
+                    .Where(v => v.NormalizedName == vehicleMakeEntity.NormalizedName)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                if (vehicleAlreadyAdded is not null)
+                {
+                    _logger.LogInformation("Vehicle '{0}' have already been added.", vehicleAlreadyAdded.NormalizedName);
+                    continue;
+                }
 
                 await _vehicleContext.VehiclesMakes.AddAsync(
                     VehicleMakeModel.MapFromEntity(vehicleMakeEntity));
@@ -45,7 +60,7 @@ public class MakesRequestedToCreateHandler
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to add vehicle {0}.", item);
+                _logger.LogError(ex, "Failed to add vehicle '{0}'.", item.MakeId);
             }
     }
 }
