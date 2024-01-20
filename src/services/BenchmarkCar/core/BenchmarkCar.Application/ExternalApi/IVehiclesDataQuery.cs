@@ -8,5 +8,6 @@ public interface IVehiclesDataQuery
     Task<CreateVehicleModelApiDetails> GetByExternalModelId(
         object modelId, 
         CancellationToken cancellationToken = default);
-    IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync();
+    IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync(
+        CancellationToken cancellationToken = default);
 }

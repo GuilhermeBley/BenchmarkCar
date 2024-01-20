@@ -6,6 +6,8 @@ using BenchmarkCar.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace BenchmarkCar.Infrastructure.ExternalApi;
 
@@ -62,7 +64,9 @@ internal class CarApiVehiclesDataQuery
         const string PATH = "api/trims/{id}";
 
         using var response
-            = await _httpClient.GetAsync(PATH, cancellationToken);
+            = await _httpClient.GetAsync(
+                PATH.Replace("{id}", modelTextId), 
+                cancellationToken);
 
         if (!response.IsSuccessStatusCode)
         {
@@ -85,9 +89,43 @@ internal class CarApiVehiclesDataQuery
             createEngineModel);
     }
 
-    public IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync()
+    public async IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync(
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        using var session = _semaphoreSession;
+
+        await session.WaitAsync(cancellationToken);
+
+        await _loginSession.EnsureClientLoggedAsync(cancellationToken);
+
+
+        const string PATH = "api/makes?page={page}";
+
+        for (int page = 1; ; page++)
+        {
+
+            using var response
+                = await _httpClient.GetAsync(
+                    PATH.Replace("{page}", page.ToString()),
+                    cancellationToken);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                yield break;
+
+            response.EnsureSuccessStatusCode();
+
+            var result = 
+                await response.Content.ReadFromJsonAsync<VehicleMakeResponse>();
+
+            if (result is null ||
+                result.Data is null)
+                yield break;
+
+            foreach (var apiMake in result.Data)
+                yield return new CreateMakeModel(
+                    apiMake.Id.ToString(),
+                    apiMake.Name ?? string.Empty);
+        }
     }
 
     /// <summary>
