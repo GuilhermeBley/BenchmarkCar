@@ -98,7 +98,6 @@ internal class CarApiVehiclesDataQuery
 
         await _loginSession.EnsureClientLoggedAsync(cancellationToken);
 
-
         const string PATH = "api/makes?page={page}";
 
         for (int page = 1; ; page++)
