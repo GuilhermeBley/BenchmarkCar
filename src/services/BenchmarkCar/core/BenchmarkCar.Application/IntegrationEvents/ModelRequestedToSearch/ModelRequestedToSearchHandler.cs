@@ -98,8 +98,9 @@ public class ModelRequestedToSearchHandler
             bodyModelCreated = (await _vehicleContext.ModelBodies.AddAsync(ModelBodyModel.MapFromEntity(modelBody))).Entity;
         }
 
-        await transaction.CommitAsync(cancellationToken);
         await _vehicleContext.SaveChangesAsync(cancellationToken);
+
+        await transaction.CommitAsync(cancellationToken);
     }
 
     private async Task ThrowIfAlreadyContainsModelEngineAsync(Guid modelId)
