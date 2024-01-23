@@ -46,7 +46,7 @@ public class CreateModelsByMakeHandler
 
         var vehicleMakeEntity = vehicleMake.MapToEntity();
 
-        await foreach (var modelSummary in _api.GetByModelsSummaryByMakeAsync()
+        await foreach (var modelSummary in _api.GetByModelsSummaryByMakeAsync(vehicleMake.ExternalId)
             .WithCancellation(cancellationToken))
         {
             var vehicleFound =

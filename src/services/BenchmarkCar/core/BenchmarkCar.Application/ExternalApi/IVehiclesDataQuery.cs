@@ -13,5 +13,6 @@ public interface IVehiclesDataQuery
         CancellationToken cancellationToken = default);
 
     IAsyncEnumerable<CreateApiModelSummaryModel> GetByModelsSummaryByMakeAsync(
+        object makeId,
         CancellationToken cancellationToken = default);
 }
