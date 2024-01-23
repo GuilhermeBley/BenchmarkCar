@@ -1,4 +1,5 @@
 ﻿using BenchmarkCar.Application.ExternalApi;
+using BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake;
 using BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
 using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
 using BenchmarkCar.Infrastructure.Model.CarApi;
@@ -65,7 +66,7 @@ internal class CarApiVehiclesDataQuery
 
         using var response
             = await _httpClient.GetAsync(
-                PATH.Replace("{id}", modelTextId), 
+                PATH.Replace("{id}", modelTextId),
                 cancellationToken);
 
         if (!response.IsSuccessStatusCode)
@@ -113,7 +114,7 @@ internal class CarApiVehiclesDataQuery
 
             response.EnsureSuccessStatusCode();
 
-            var result = 
+            var result =
                 await response.Content.ReadFromJsonAsync<VehicleMakeResponse>();
 
             if (result is null ||
@@ -124,6 +125,51 @@ internal class CarApiVehiclesDataQuery
                 yield return new CreateMakeModel(
                     apiMake.Id.ToString(),
                     apiMake.Name ?? string.Empty);
+        }
+    }
+
+    public async IAsyncEnumerable<CreateApiModelSummaryModel> GetByModelsSummaryByMakeAsync(
+        object makeId,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        using var session = _semaphoreSession;
+
+        await session.WaitAsync(cancellationToken);
+
+        await _loginSession.EnsureClientLoggedAsync(cancellationToken);
+
+        const string PATH = "api/trims?make_id={makeId}&page={page}";
+
+        for (int page = 1; ; page++)
+        {
+
+            using var response
+                = await _httpClient.GetAsync(
+                    PATH
+                        .Replace("{makeId}", makeId.ToString())
+                        .Replace("{page}", page.ToString()),
+                    cancellationToken);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                yield break;
+
+            response.EnsureSuccessStatusCode();
+
+            var result =
+                await response.Content.ReadFromJsonAsync<VehicleTrimSummaryResponse>();
+
+            if (result is null ||
+                result.Data is null)
+                yield break;
+
+            foreach (var apiSummaryModel in result.Data)
+                yield return new CreateApiModelSummaryModel(
+                    ExternalId: apiSummaryModel.Id ?? 
+                        throw new CommonCoreException("Invalid id."),
+                    Year: apiSummaryModel.Year ?? 
+                        throw new CommonCoreException("Invalid year."),
+                    Name: apiSummaryModel.Name ?? string.Empty,
+                    Description: apiSummaryModel.Description ?? string.Empty);
         }
     }
 
