@@ -219,7 +219,8 @@ internal class CarApiVehiclesDataQuery
 
             result.EnsureSuccessStatusCode();
 
-            return await result.Content.ReadAsStringAsync();
+            _lastToken = await result.Content.ReadAsStringAsync();
+            return _lastToken;
         }
 
         private static bool IsntExpired(string token)
