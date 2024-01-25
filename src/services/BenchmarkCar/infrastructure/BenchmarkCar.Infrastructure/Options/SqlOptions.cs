@@ -1,6 +1,12 @@
-﻿namespace BenchmarkCar.Infrastructure.Options;
+﻿using System.ComponentModel.DataAnnotations;
 
-internal class SqlOptions
+namespace BenchmarkCar.Infrastructure.Options;
+
+public class SqlOptions
 {
+    public const string SECTION = "SqlServer";
+
+    [Required]
+    [MinLength(10)]
     public string ConnectionString { get; init; } = string.Empty;
 }

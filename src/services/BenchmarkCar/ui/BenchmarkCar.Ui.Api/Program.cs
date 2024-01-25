@@ -1,4 +1,5 @@
 using BenchmarkCar.Infrastructure.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,13 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices(
     builder.Configuration);
+
+builder.Services.AddOptions<BenchmarkCar.Infrastructure.Options.CarApiOptions>()
+    .Bind(builder.Configuration.GetSection(BenchmarkCar.Infrastructure.Options.CarApiOptions.SECTION))
+    .ValidateDataAnnotations();
+builder.Services.AddOptions<BenchmarkCar.Infrastructure.Options.SqlOptions>()
+    .Bind(builder.Configuration.GetSection(BenchmarkCar.Infrastructure.Options.SqlOptions.SECTION))
+    .ValidateDataAnnotations();
 
 var app = builder.Build();
 
