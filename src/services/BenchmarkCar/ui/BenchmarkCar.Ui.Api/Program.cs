@@ -11,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices(
-    builder.Configuration);
+    builder.Configuration,
+    migrationAssembly: typeof(Program).GetType().Assembly);
 
 builder.Services.AddOptions<BenchmarkCar.Infrastructure.Options.CarApiOptions>()
     .Bind(builder.Configuration.GetSection(BenchmarkCar.Infrastructure.Options.CarApiOptions.SECTION))

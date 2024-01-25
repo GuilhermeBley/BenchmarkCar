@@ -34,12 +34,6 @@ internal class SqlVehicleContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        
-        optionsBuilder.UseSqlServer(
-            connectionString: _options.Value.ConnectionString,
-            opt =>
-            {
-            });
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
