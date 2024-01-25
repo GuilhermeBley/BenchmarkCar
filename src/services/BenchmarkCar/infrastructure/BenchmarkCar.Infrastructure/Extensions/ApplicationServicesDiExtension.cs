@@ -11,6 +11,12 @@ public static class ApplicationServicesDiExtension
     {
         serviceCollection.AddLogging();
 
+        serviceCollection.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(
+                typeof(Application.Commands.CreateVehicleMake.CreateVehicleMakeHandler).Assembly);
+        });
+
         serviceCollection.AddDbContextPool<Repositories.SqlVehicleContext>(opt =>
         {
         });
