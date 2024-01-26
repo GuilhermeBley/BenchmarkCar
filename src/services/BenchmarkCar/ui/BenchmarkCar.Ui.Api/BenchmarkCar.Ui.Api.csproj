@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus\BenchmarkCar.EventBus.Azure\BenchmarkCar.EventBus.Azure.csproj" />
     <ProjectReference Include="..\..\infrastructure\BenchmarkCar.Infrastructure\BenchmarkCar.Infrastructure.csproj" />
   </ItemGroup>
 
