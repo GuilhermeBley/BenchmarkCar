@@ -1,4 +1,5 @@
 using BenchmarkCar.Infrastructure.Extensions;
+using BenchmarkCar.EventBus.Azure.Extensions.Di;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices(
     builder.Configuration,
     migrationAssembly: typeof(Program).GetType().Assembly);
+
+builder.Services.AddEventBus(
+    subscriptionName: builder.Configuration.GetValue<string>("EventBus:BenchmarkCarSub"),
+    (provider, eventBus) =>
+    {
+        eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateModelsByMakeIntegrationEvent,
+            BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake.CreateModelsByMakeHandler>();
+        eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateModelIntegrationEvent,
+            BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc.ModelRequestedToSearchHandler>();
+        eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateMakesIntegrationEvent,
+            BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate.MakesRequestedToCreateHandler>();
+    });
 
 builder.Services.AddOptions<BenchmarkCar.Infrastructure.Options.CarApiOptions>()
     .Bind(builder.Configuration.GetSection(BenchmarkCar.Infrastructure.Options.CarApiOptions.SECTION))
