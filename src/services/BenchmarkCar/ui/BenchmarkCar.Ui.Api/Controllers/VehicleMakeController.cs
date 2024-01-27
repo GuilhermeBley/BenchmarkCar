@@ -19,6 +19,15 @@ public class VehicleMakeController : ControllerBase
         _logger = logger;
     }
 
+    [HttpGet]
+    public Task<ActionResult> GetMakesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogTrace("Requesting make creation at {0}.", DateTimeOffset.UtcNow);
+
+        throw new NotImplementedException("Get all makes not implemented.");
+    }
+
     [HttpPost("Request")]
     public async Task<ActionResult> RequestToCreateOrUpdateMakesAsync(
         CancellationToken cancellationToken = default)
