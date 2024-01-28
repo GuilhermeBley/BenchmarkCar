@@ -2,5 +2,10 @@ using MediatR;
 
 namespace BenchmarkCar.Application.Commands.GetAllMakes;
 
-internal record GetAllMakesRequest()
-    : IRequest<GetAllMakesResponse>;
+public record GetAllMakesRequest()
+    : IRequest<IEnumerable<MakeResponse>>;
+
+public record MakeResponse(
+    Guid Id,
+    string NormalizedName,
+    string Name);

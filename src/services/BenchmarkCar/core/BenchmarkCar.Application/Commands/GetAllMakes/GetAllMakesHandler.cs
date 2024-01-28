@@ -1,12 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BenchmarkCar.Application.Repositories;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace BenchmarkCar.Application.Commands.GetAllMakes
+namespace BenchmarkCar.Application.Commands.GetAllMakes;
+
+public class GetAllMakesHandler
+    : IRequestHandler<GetAllMakesRequest, IEnumerable<MakeResponse>>
 {
-    internal class GetAllMakesHandler
+    private readonly VehicleContext _vehicleContext;
+    private readonly ICoreLogger<GetAllMakesHandler> _logger;
+
+    public GetAllMakesHandler(VehicleContext vehicleContext, ICoreLogger<GetAllMakesHandler> logger)
     {
+        _vehicleContext = vehicleContext;
+        _logger = logger;
+    }
+
+    public async Task<IEnumerable<MakeResponse>> Handle(GetAllMakesRequest request, CancellationToken cancellationToken)
+    {
+        _logger.LogTrace("requesting all makes.");
+
+        return await _vehicleContext
+            .VehiclesMakes
+            .Select(m => new MakeResponse(m.Id, m.NormalizedName, m.Name))
+            .ToListAsync(cancellationToken);
     }
 }
