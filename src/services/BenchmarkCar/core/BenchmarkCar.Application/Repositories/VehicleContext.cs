@@ -11,4 +11,9 @@ public abstract class VehicleContext
     public abstract DbSet<BestModelModel> BestModels { get; set; }
     public abstract DbSet<ModelBodyModel> ModelBodies { get; set; }
     public abstract DbSet<ModelEngineModel> EngineModels { get; set; }
+
+    public VehicleContext (DbContextOptions options)
+        : base (options)
+    {
+    }
 }

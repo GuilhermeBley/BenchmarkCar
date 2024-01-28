@@ -21,7 +21,7 @@ public static class ApplicationServicesDiExtension
                 typeof(Application.Commands.CreateVehicleMake.CreateVehicleMakeHandler).Assembly);
         });
 
-        serviceCollection.AddDbContextPool<Repositories.SqlVehicleContext>((provider, opt) =>
+        serviceCollection.AddDbContext<Repositories.SqlVehicleContext>((provider, opt) =>
         {
             opt.UseSqlServer(
                 connectionString: provider

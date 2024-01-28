@@ -25,15 +25,12 @@ internal class SqlVehicleContext
 
     public SqlVehicleContext(
         ILogger<SqlVehicleContext> logger,
-        IOptions<Options.SqlOptions> options)
+        IOptions<Options.SqlOptions> options,
+        DbContextOptions<SqlVehicleContext> dbOptions)
+        : base(dbOptions)
     {
         _logger = logger;
         _options = options;
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
