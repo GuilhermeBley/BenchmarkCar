@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using BenchmarkCar.Application.Commands.GetAllMakes;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,12 +21,17 @@ public class VehicleMakeController : ControllerBase
     }
 
     [HttpGet]
-    public Task<ActionResult> GetMakesAsync(
+    public async Task<ActionResult> GetMakesAsync(
         CancellationToken cancellationToken = default)
     {
         _logger.LogTrace("Requesting make creation at {0}.", DateTimeOffset.UtcNow);
 
-        throw new NotImplementedException("Get all makes not implemented.");
+        var result = await _mediator.Send(new GetAllMakesRequest(), cancellationToken);
+
+        if (result.Any())
+            return Ok(result);
+
+        return NoContent();
     }
 
     [HttpPost("Request")]
