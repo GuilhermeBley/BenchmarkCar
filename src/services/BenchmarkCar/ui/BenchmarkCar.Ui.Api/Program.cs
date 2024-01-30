@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddApplicationServices(
     builder.Configuration,
-    migrationAssembly: typeof(Program).GetType().Assembly);
+    migrationAssembly: typeof(BenchmarkCar.Ui.Api.Controllers.VehicleMakeController).GetType().Assembly);
 
 builder.Services.AddEventBus(
     subscriptionName: builder.Configuration.GetValue<string>("EventBus:BenchmarkCarSub"),
