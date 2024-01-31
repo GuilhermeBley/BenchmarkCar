@@ -16,7 +16,7 @@ builder.Services.AddApplicationServices(
     migrationAssembly: typeof(BenchmarkCar.Ui.Api.Controllers.VehicleMakeController).Assembly);
 
 builder.Services.AddEventBus(
-    subscriptionName: builder.Configuration.GetValue<string>("EventBus:BenchmarkCarSub"),
+    subscriptionName: builder.Configuration.GetValue<string>("AzureServiceBus:BenchmarkCarSub"),
     (provider, eventBus) =>
     {
         eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateModelsByMakeIntegrationEvent,
