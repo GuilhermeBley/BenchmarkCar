@@ -41,6 +41,12 @@ internal class SqlVehicleContext
         {
             cfg.HasKey(p => p.Id);
             cfg.HasIndex(p => p.NormalizedName).IsUnique();
+            cfg.Property(e => e.NormalizedName)
+                .HasColumnType("varchar(255)");
+            cfg.Property(e => e.Name)
+                .HasColumnType("varchar(255)");
+            cfg.Property(e => e.ExternalId)
+                .HasColumnType("varchar(255)");
         });
 
         modelBuilder.Entity<VehicleModelModel>(cfg =>
@@ -48,12 +54,20 @@ internal class SqlVehicleContext
             cfg.HasKey(p => p.Id);
             cfg.HasIndex(p => p.NormalizedName).IsUnique();
             cfg.HasOne(p => p.VehicleMake).WithMany().HasForeignKey(p => p.VehicleMakeId);
+            cfg.Property(e => e.NormalizedName)
+                .HasColumnType("varchar(255)");
+            cfg.Property(e => e.Name)
+                .HasColumnType("varchar(255)");
+            cfg.Property(e => e.ExternalId)
+                .HasColumnType("varchar(255)");
         });
 
         modelBuilder.Entity<BestModelModel>(cfg =>
         {
             cfg.HasKey(p => p.Id);
             cfg.HasOne<VehicleModelModel>().WithMany().HasForeignKey(p => p.VehicleModelId);
+            cfg.Property(e => e.Area)
+                .HasColumnType("varchar(255)");
         });
 
         modelBuilder.Entity<ModelBodyModel>(cfg =>
@@ -61,6 +75,14 @@ internal class SqlVehicleContext
             cfg.HasKey(p => p.ModelId);
             cfg.HasIndex(p => p.ExternalId).IsUnique();
             cfg.HasOne<VehicleModelModel>().WithMany().HasForeignKey(p => p.ModelId);
+            cfg.Property(e => e.ExternalId)
+                .HasColumnType("varchar(255)");
+            cfg.Property(e => e.Length)
+                .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.EngineSize)
+                .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.Width)
+                .HasColumnType("decimal(10,2)");
         });
 
         modelBuilder.Entity<ModelEngineModel>(cfg =>
@@ -68,6 +90,18 @@ internal class SqlVehicleContext
             cfg.HasKey(p => p.ModelId);
             cfg.HasIndex(p => p.ExternalId).IsUnique();
             cfg.HasOne<VehicleModelModel>().WithMany().HasForeignKey(p => p.ModelId);
+            cfg.Property(e => e.ExternalId)
+                .HasColumnType("varchar(255)");
+            cfg.Property(e => e.TorqueRpm)
+                .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.TorqueFtLbs)
+                .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.Valves)
+                .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.HorsePowerHp)
+                .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.HorsePowerRpm)
+                .HasColumnType("decimal(10,2)");
         });
     }
 }
