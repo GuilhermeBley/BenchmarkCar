@@ -202,7 +202,7 @@ internal class CarApiVehiclesDataQuery
 
         private async Task<string> GetTokenAsync(CancellationToken cancellationToken = default)
         {
-            const string PATH = "/auth/login";
+            const string PATH = "api/auth/login";
 
             if (_lastToken is not null &&
                 IsntExpired(_lastToken))

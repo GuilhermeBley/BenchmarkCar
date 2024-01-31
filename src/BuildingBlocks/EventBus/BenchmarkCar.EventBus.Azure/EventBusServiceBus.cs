@@ -11,22 +11,20 @@ namespace BenchmarkCar.EventBus.Azure;
 
 internal class EventBusServiceBus : IEventBus
 {
-    private const string INTEGRATION_EVENT_SUFIX = nameof(IntegrationEvent);
-
     private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
     private readonly ILogger<EventBusServiceBus> _logger;
     private readonly IEventBusSubscriptionsManager _subsManager;
     private readonly IServiceScope _scopeLifeTime;
 
-    private ServiceBusProcessor _subscriptionProcessor 
+    private ServiceBusProcessor _subscriptionProcessor
         => _serviceBusPersisterConnection.SubscriptionProcessor;
-    private ServiceBusRuleManager _subscriptionRuleManager 
+    private ServiceBusRuleManager _subscriptionRuleManager
         => _serviceBusPersisterConnection.SubscriptionRuleManager;
 
     public EventBusServiceBus(
         IServiceBusPersisterConnection serviceBusPersisterConnection,
-        ILogger<EventBusServiceBus> logger, 
-        IEventBusSubscriptionsManager subsManager, 
+        ILogger<EventBusServiceBus> logger,
+        IEventBusSubscriptionsManager subsManager,
         IServiceProvider provider)
     {
         _serviceBusPersisterConnection = serviceBusPersisterConnection;
@@ -38,7 +36,7 @@ internal class EventBusServiceBus : IEventBus
 
     public async Task PublishAsync(IntegrationEvent @event)
     {
-        var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFIX, string.Empty);
+        var eventName = @event.GetType().Name;
         var jsonMessage = JsonSerializer.Serialize(@event, @event.GetType());
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
@@ -75,7 +73,7 @@ internal class EventBusServiceBus : IEventBus
                     eventName,
                     new CorrelationRuleFilter
                     {
-                         Subject = eventName,
+                        Subject = eventName,
                     }).GetAwaiter().GetResult();
             }
             catch (ServiceBusException)
@@ -91,7 +89,7 @@ internal class EventBusServiceBus : IEventBus
         where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
-        var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFIX, "");
+        var eventName = typeof(T).Name;
 
         try
         {
@@ -126,7 +124,7 @@ internal class EventBusServiceBus : IEventBus
             {
                 var eventName = $"{psm.Message.Subject}";
                 var messageData = Encoding.UTF8.GetString(psm.Message.Body);
-                
+
                 // Complete the message so that it is not received again.
                 if (await ProcessEvent(eventName, messageData))
                 {
@@ -134,7 +132,7 @@ internal class EventBusServiceBus : IEventBus
                 }
             };
         _subscriptionProcessor.ProcessErrorAsync += ExceptionReceivedHandler;
-        
+
         _subscriptionProcessor.StartProcessingAsync().GetAwaiter().GetResult();
     }
 
@@ -152,34 +150,36 @@ internal class EventBusServiceBus : IEventBus
         var processed = false;
         if (_subsManager.HasSubscriptionsForEvent(eventName))
         {
-            await using (var scope = _scopeLifeTime.ServiceProvider.CreateAsyncScope())
-            {
-                var subscriptions = _subsManager.GetHandlersForEvent(eventName);
-                foreach (var subscription in subscriptions)
+            var subscriptions = _subsManager.GetHandlersForEvent(eventName);
+
+            await Parallel.ForEachAsync(
+                subscriptions,
+                async (subscription, cancellationToken) =>
                 {
+                    await using var scope = _scopeLifeTime.ServiceProvider.CreateAsyncScope();
+
                     if (subscription.IsDynamic)
                     {
                         var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, subscription.HandlerType) as IDynamicIntegrationEventHandler;
-                        if (handler == null) continue;
+                        if (handler == null) return;
                         dynamic? eventData = JsonSerializer.Deserialize<dynamic>(message);
                         await handler.Handle(eventData, cancellationToken);
                     }
                     else
                     {
                         var handler = ActivatorUtilities.CreateInstance(scope.ServiceProvider, subscription.HandlerType);
-                        if (handler == null) continue;
+                        if (handler == null) return;
                         var eventType = _subsManager.GetEventTypeByName(eventName);
-                        if (eventType is null) continue;
+                        if (eventType is null) return;
                         var integrationEvent = JsonSerializer.Deserialize(message, eventType);
-                        if (integrationEvent is null) continue;
+                        if (integrationEvent is null) return;
                         var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                         var tsk = concreteType?.GetMethod(nameof(IIntegrationEventHandler<IntegrationEvent>.Handle))?
                             .Invoke(handler, new object[] { integrationEvent, cancellationToken }) as Task;
                         if (tsk is not null)
                             await tsk.ConfigureAwait(false);
                     }
-                }
-            }
+                });
             processed = true;
         }
         return processed;

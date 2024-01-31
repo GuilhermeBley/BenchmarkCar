@@ -1,6 +1,7 @@
 using BenchmarkCar.Infrastructure.Extensions;
 using BenchmarkCar.EventBus.Azure.Extensions.Di;
 using Microsoft.Extensions.DependencyInjection;
+using BenchmarkCar.EventBus.Abstractions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ builder.Services.AddOptions<BenchmarkCar.EventBus.Azure.AzureServiceBusOptions>(
     .ValidateDataAnnotations();
 
 var app = builder.Build();
+
+app.Services.GetRequiredService<IEventBus>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
