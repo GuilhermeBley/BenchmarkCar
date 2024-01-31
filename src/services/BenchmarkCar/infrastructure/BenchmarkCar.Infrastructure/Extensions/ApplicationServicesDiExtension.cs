@@ -30,7 +30,10 @@ public static class ApplicationServicesDiExtension
                 {
                     opt.MigrationsAssembly(
                         migrationAssembly?.FullName ?? typeof(ApplicationServicesDiExtension).Assembly.FullName);
-    
+                    opt.EnableRetryOnFailure(
+                        maxRetryCount: 5,
+                        maxRetryDelay: System.TimeSpan.FromSeconds(30),
+                        errorNumbersToAdd: null);
                 });
         });
 
