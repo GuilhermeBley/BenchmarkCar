@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using BenchmarkCar.Infrastructure.ExternalApi;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -42,8 +43,7 @@ public static class ApplicationServicesDiExtension
         serviceCollection.AddSingleton<Application.Log.ICoreLogger, Log.InfrastructureLogger>();
         serviceCollection.AddSingleton(typeof(Application.Log.ICoreLogger<>), typeof(Log.InfrastructureLogger<>));
 
-        serviceCollection.AddHttpClient<ExternalApi.CarApiVehiclesDataQuery>(
-            ExternalApi.CarApiVehiclesDataQuery.Configure);
+        serviceCollection.AddHttpClient(nameof(CarApiVehiclesDataQuery), ExternalApi.CarApiVehiclesDataQuery.Configure);
 
         serviceCollection.AddSingleton<Application.ExternalApi.IVehiclesDataQuery, ExternalApi.CarApiVehiclesDataQuery>();
 

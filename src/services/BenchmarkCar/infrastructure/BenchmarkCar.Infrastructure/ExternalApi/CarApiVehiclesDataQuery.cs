@@ -17,7 +17,7 @@ internal class CarApiVehiclesDataQuery
 {
     private const string URL = "https://carapi.app/";
 
-    public readonly static Action<IServiceProvider, HttpClient> Configure =
+    public static Action<IServiceProvider, HttpClient> Configure { get; } =
         (provider, client) =>
         {
             client.BaseAddress = new Uri(URL);
@@ -42,10 +42,10 @@ internal class CarApiVehiclesDataQuery
         => new(_httpClient, _options);
 
     public CarApiVehiclesDataQuery(
-        HttpClient httpClient,
+        IHttpClientFactory factory,
             IOptions<CarApiOptions> options)
     {
-        _httpClient = httpClient;
+        _httpClient = factory.CreateClient(nameof(CarApiVehiclesDataQuery));
         _options = options;
     }
 
