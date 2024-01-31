@@ -63,7 +63,7 @@ internal class EventBusServiceBus : IEventBus
         where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
-        var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFIX, "");
+        var eventName = typeof(T).Name;
 
         var containsKey = _subsManager.HasSubscriptionsForEvent<T>();
         if (!containsKey)
@@ -140,9 +140,10 @@ internal class EventBusServiceBus : IEventBus
 
     private Task ExceptionReceivedHandler(ProcessErrorEventArgs exceptionReceivedEventArgs)
     {
-        Console.WriteLine($"Message handler encountered an exception {exceptionReceivedEventArgs.Exception}.");
-        Console.WriteLine("Exception context for troubleshooting:");
-        Console.WriteLine($"- Entity Path: {exceptionReceivedEventArgs.EntityPath}");
+        _logger.LogError(
+            exceptionReceivedEventArgs.Exception,
+            "Message handler encountered an exception. Entity Path: {0}",
+            exceptionReceivedEventArgs.EntityPath);
         return Task.CompletedTask;
     }
 

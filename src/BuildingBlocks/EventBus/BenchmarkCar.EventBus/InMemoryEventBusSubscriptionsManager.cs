@@ -1,13 +1,11 @@
 ﻿using BenchmarkCar.EventBus.Abstractions;
-using System.Diagnostics.CodeAnalysis;
 
 namespace BenchmarkCar.EventBus;
 
 public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
 {
-    private static readonly EventEqualityComparer _eventEqualityComparer = new EventEqualityComparer();
     private readonly Dictionary<string, List<SubscriptionInfo>> _handlers
-         = new Dictionary<string, List<SubscriptionInfo>>(_eventEqualityComparer);
+         = new Dictionary<string, List<SubscriptionInfo>>(StringComparer.OrdinalIgnoreCase);
     private readonly List<Type> _eventTypes = new List<Type>();
 
     public event EventHandler<string> OnEventRemoved = null!;
@@ -144,7 +142,8 @@ public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptio
         var key = GetEventKey<T>();
         return HasSubscriptionsForEvent(key);
     }
-    public bool HasSubscriptionsForEvent(string eventName) => _handlers.ContainsKey(eventName);
+    public bool HasSubscriptionsForEvent(string eventName) 
+        => _handlers.ContainsKey(eventName);
 
     public Type? GetEventTypeByName(string eventName) 
         => _eventTypes.SingleOrDefault(t => t.Name == eventName);
@@ -152,14 +151,5 @@ public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptio
     public string GetEventKey<T>()
     {
         return typeof(T).Name;
-    }
-
-    private class EventEqualityComparer : IEqualityComparer<string>
-    {
-        public bool Equals(string? x, string? y)
-            => string.Equals(x, y, StringComparison.OrdinalIgnoreCase);
-
-        public int GetHashCode([DisallowNull] string obj)
-            => obj.GetHashCode(StringComparison.OrdinalIgnoreCase);
     }
 }
