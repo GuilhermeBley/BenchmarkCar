@@ -33,6 +33,9 @@ builder.Services.AddOptions<BenchmarkCar.Infrastructure.Options.CarApiOptions>()
 builder.Services.AddOptions<BenchmarkCar.Infrastructure.Options.SqlOptions>()
     .Bind(builder.Configuration.GetSection(BenchmarkCar.Infrastructure.Options.SqlOptions.SECTION))
     .ValidateDataAnnotations();
+builder.Services.AddOptions<BenchmarkCar.EventBus.Azure.AzureServiceBusOptions>()
+    .Bind(builder.Configuration.GetSection(BenchmarkCar.EventBus.Azure.AzureServiceBusOptions.SECTION))
+    .ValidateDataAnnotations();
 
 var app = builder.Build();
 
