@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 
 namespace BenchmarkCar.Infrastructure.Repositories;
 
-internal class SqlVehicleContext
+public class SqlVehicleContext
     : VehicleContext
 {
     private readonly ILogger<SqlVehicleContext> _logger;
