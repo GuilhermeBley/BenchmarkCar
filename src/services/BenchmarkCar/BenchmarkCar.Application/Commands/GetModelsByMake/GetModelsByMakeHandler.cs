@@ -22,6 +22,8 @@ public class GetModelsByMakeHandler
         GetModelsByMakeRequest request, 
         CancellationToken cancellationToken)
     {
+        _logger.LogTrace("Request to query data about make '{0}'.", request.MakeId);
+
         var makeFound =
             await _vehicleContext
             .VehiclesMakes
