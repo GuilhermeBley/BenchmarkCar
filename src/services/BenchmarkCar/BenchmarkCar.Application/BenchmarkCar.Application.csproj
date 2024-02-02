@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus\BenchmarkCar.EventBus\BenchmarkCar.EventBus.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus\BenchmarkCar.EventBus\BenchmarkCar.EventBus.csproj" />
     <ProjectReference Include="..\BenchmarkCar.Domain\BenchmarkCar.Domain.csproj" />
   </ItemGroup>
 
