@@ -33,4 +33,19 @@ public class VehicleModelController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpGet("make/{makeId}")]
+    public async Task<ActionResult> GetVehiclesModelsByMakeIdAsync(
+        Guid makeId,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogTrace("Requesting vehicle complete data '{0}' at {1}.",
+            makeId, DateTimeOffset.UtcNow);
+
+        var result = await _mediator.Send(
+            new Application.Commands.GetModelsByMake.GetModelsByMakeRequest(makeId),
+            cancellationToken);
+
+        return Ok(result);
+    }
 }
