@@ -46,6 +46,6 @@ public class VehicleModelController : ControllerBase
             new Application.Commands.GetModelsByMake.GetModelsByMakeRequest(makeId),
             cancellationToken);
 
-        return Ok(result);
+        return Ok(result.Values);
     }
 }
