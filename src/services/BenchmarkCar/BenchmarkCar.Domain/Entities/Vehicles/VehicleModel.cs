@@ -135,7 +135,7 @@ public class VehicleModel
             vehicleMake: vehicleMake,
             name: name,
             year: year,
-            normalizedName: name.ToUpperInvariant(),
+            normalizedName: normalizedName,
             description: description,
             externalId: externalId,
             insertedAt: insertedAt);
