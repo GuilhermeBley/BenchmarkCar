@@ -158,7 +158,6 @@ internal class CarApiVehiclesDataQuery
         for (int page = 1; ; page++)
             foreach (var year in _availableYearsRange)
             {
-
                 using var response
                     = await _httpClient.GetAsync(
                         PATH

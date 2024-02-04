@@ -106,6 +106,9 @@ public class VehicleModel
             name.Length < MIN_NAME_LENGTH)
             throw new CommonCoreException($"Invalid name, the string length is '{MIN_NAME_LENGTH}' to '{MAX_NAME_LENGTH}'.");
 
+        if (!IsValidName(name))
+            throw new CommonCoreException($"Invalid model name '{name}'.");
+
         if (description is not null &&
             description.Length > MAX_DESCRIPTION_LENGTH)
             throw new CommonCoreException($"Invalid description, the max length is '{MAX_DESCRIPTION_LENGTH}'.");
@@ -137,4 +140,10 @@ public class VehicleModel
             externalId: externalId,
             insertedAt: insertedAt);
     }
+
+    private static bool IsValidName(string name)
+        => System.Text.RegularExpressions.Regex.IsMatch(
+            input: name,
+            pattern: "^[a-z0-9 - _ áàâãäèêëíìîïòôõöúùûüç]{1,}$",
+            options: System.Text.RegularExpressions.RegexOptions.IgnoreCase | System.Text.RegularExpressions.RegexOptions.Singleline);
 }
