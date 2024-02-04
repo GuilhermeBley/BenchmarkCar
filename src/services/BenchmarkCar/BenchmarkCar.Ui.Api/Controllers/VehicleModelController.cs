@@ -33,4 +33,18 @@ public class VehicleModelController : ControllerBase
 
         return Ok(result);
     }
+
+    [HttpPost("request/make/{makeId}")]
+    public async Task<ActionResult> RequestToCreateOrUpdateModelsAsync(
+        Guid makeId,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogTrace("Requesting make creation at {0}.", DateTimeOffset.UtcNow);
+
+        var result = await _mediator.Send(
+            new BenchmarkCar.Application.Commands.CreateVehicleMakeSummary.RequestVehicleModelSummaryRequest(makeId),
+            cancellationToken);
+
+        return Ok(result);
+    }
 }
