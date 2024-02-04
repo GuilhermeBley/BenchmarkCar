@@ -86,9 +86,9 @@ public class CreateModelsByMakeHandler
             await _vehicleContext.VehiclesModels.AddAsync(
                 VehicleModelModel.MapFromEntity(vehicleModelEntity));
 
-            await _vehicleContext.SaveChangesAsync(cancellationToken);   
-
             await transaction.CommitAsync(cancellationToken);
+
+            await _vehicleContext.SaveChangesAsync(cancellationToken);   
         }
     }
 }
