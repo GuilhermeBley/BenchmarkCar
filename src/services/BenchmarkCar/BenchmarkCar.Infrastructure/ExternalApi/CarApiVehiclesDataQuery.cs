@@ -17,6 +17,21 @@ internal class CarApiVehiclesDataQuery
 {
     private const string URL = "https://carapi.app/";
 
+    private static IReadOnlyList<int> _availableYearsRange
+        = new[] { 
+            2010, 
+            2011, 
+            2012, 
+            2013, 
+            2014, 
+            2015, 
+            2016, 
+            2017, 
+            2018, 
+            2019, 
+            2020, 
+        };
+
     public static Action<IServiceProvider, HttpClient> Configure { get; } =
         (provider, client) =>
         {
@@ -138,39 +153,41 @@ internal class CarApiVehiclesDataQuery
 
         await _loginSession.EnsureClientLoggedAsync(cancellationToken);
 
-        const string PATH = "api/trims?make_id={makeId}&page={page}";
+        const string PATH = "api/trims?make_id={makeId}&page={page}&year={year}";
 
         for (int page = 1; ; page++)
-        {
+            foreach (var year in _availableYearsRange)
+            {
 
-            using var response
-                = await _httpClient.GetAsync(
-                    PATH
-                        .Replace("{makeId}", makeId.ToString())
-                        .Replace("{page}", page.ToString()),
-                    cancellationToken);
+                using var response
+                    = await _httpClient.GetAsync(
+                        PATH
+                            .Replace("{year}", year.ToString())
+                            .Replace("{makeId}", makeId.ToString())
+                            .Replace("{page}", page.ToString()),
+                        cancellationToken);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
-                yield break;
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    yield break;
 
-            response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
-            var result =
-                await response.Content.ReadFromJsonAsync<VehicleTrimSummaryResponse>();
+                var result =
+                    await response.Content.ReadFromJsonAsync<VehicleTrimSummaryResponse>();
 
-            if (result is null ||
-                result.Data is null)
-                yield break;
+                if (result is null ||
+                    result.Data is null)
+                    yield break;
 
-            foreach (var apiSummaryModel in result.Data)
-                yield return new CreateApiModelSummaryModel(
-                    ExternalId: apiSummaryModel.Id ?? 
-                        throw new CommonCoreException("Invalid id."),
-                    Year: apiSummaryModel.Year ?? 
-                        throw new CommonCoreException("Invalid year."),
-                    Name: apiSummaryModel.Name ?? string.Empty,
-                    Description: apiSummaryModel.Description ?? string.Empty);
-        }
+                foreach (var apiSummaryModel in result.Data)
+                    yield return new CreateApiModelSummaryModel(
+                        ExternalId: apiSummaryModel.Id ??
+                            throw new CommonCoreException("Invalid id."),
+                        Year: apiSummaryModel.Year ??
+                            throw new CommonCoreException("Invalid year."),
+                        Name: apiSummaryModel.Name ?? string.Empty,
+                        Description: apiSummaryModel.Description ?? string.Empty);
+            }
     }
 
     /// <summary>
