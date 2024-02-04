@@ -80,6 +80,15 @@ public class CreateModelsByMakeHandler
                 continue;
             }
 
+            var alreadyAddedModel =
+                await _vehicleContext
+                .VehiclesModels
+                .AsNoTracking()
+                .FirstOrDefaultAsync(v => v.NormalizedName == vehicleModelEntity.NormalizedName);
+
+            if (alreadyAddedModel is not null)
+                continue;
+
             using var transaction = 
                 await _vehicleContext.Database.BeginTransactionAsync(cancellationToken);
 
