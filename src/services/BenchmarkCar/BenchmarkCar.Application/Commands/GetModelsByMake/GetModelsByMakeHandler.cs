@@ -8,11 +8,11 @@ public class GetModelsByMakeHandler
     : IRequestHandler<GetModelsByMakeRequest, GetModelsByMakeResponse>
 {
     private readonly ICoreLogger<GetModelsByMakeHandler> _logger;
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
 
     public GetModelsByMakeHandler(
         ICoreLogger<GetModelsByMakeHandler> logger, 
-        VehicleContext vehicleContext)
+        BenchmarkVehicleContext vehicleContext)
     {
         _logger = logger;
         _vehicleContext = vehicleContext;

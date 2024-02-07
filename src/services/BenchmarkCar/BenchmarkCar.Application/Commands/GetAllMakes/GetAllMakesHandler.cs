@@ -7,10 +7,10 @@ namespace BenchmarkCar.Application.Commands.GetAllMakes;
 public class GetAllMakesHandler
     : IRequestHandler<GetAllMakesRequest, IEnumerable<MakeResponse>>
 {
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
     private readonly ICoreLogger<GetAllMakesHandler> _logger;
 
-    public GetAllMakesHandler(VehicleContext vehicleContext, ICoreLogger<GetAllMakesHandler> logger)
+    public GetAllMakesHandler(BenchmarkVehicleContext vehicleContext, ICoreLogger<GetAllMakesHandler> logger)
     {
         _vehicleContext = vehicleContext;
         _logger = logger;

@@ -7,9 +7,9 @@ namespace BenchmarkCar.Application.Commands.GetVehicleCompleteData;
 public class GetVehicleCompleteDataHandler
     : IRequestHandler<GetVehicleCompleteDataRequest, GetVehicleCompleteDataResponse>
 {
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
 
-    public GetVehicleCompleteDataHandler(VehicleContext vehicleContext)
+    public GetVehicleCompleteDataHandler(BenchmarkVehicleContext vehicleContext)
     {
         _vehicleContext = vehicleContext;
     }

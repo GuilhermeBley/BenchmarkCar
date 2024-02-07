@@ -9,12 +9,12 @@ namespace BenchmarkCar.Application.Commands.CreateVehicleMakeSummary;
 public class RequestVehicleModelSummaryHandler
     : IRequestHandler<RequestVehicleModelSummaryRequest, RequestVehicleModelSummaryResponse>
 {
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
     private readonly ICoreLogger<RequestVehicleModelSummaryHandler> _logger;
     private readonly IEventBus _eventBus;
 
     public RequestVehicleModelSummaryHandler(
-        VehicleContext vehicleContext,
+        BenchmarkVehicleContext vehicleContext,
         ICoreLogger<RequestVehicleModelSummaryHandler> logger,
         IEventBus eventBus)
     {

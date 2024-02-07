@@ -1,4 +1,5 @@
-﻿using BenchmarkCar.Application.Model.Vehicles;
+﻿using BenchmarkCar.Application.Model.Queue;
+using BenchmarkCar.Application.Model.Vehicles;
 using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.Infrastructure.Options;
 using Microsoft.EntityFrameworkCore;
@@ -8,20 +9,17 @@ using Microsoft.Extensions.Options;
 namespace BenchmarkCar.Infrastructure.Repositories;
 
 public class SqlVehicleContext
-    : VehicleContext
+    : BenchmarkVehicleContext
 {
     private readonly ILogger<SqlVehicleContext> _logger;
     private IOptions<SqlOptions> _options;
 
     public override DbSet<VehicleMakeModel> VehiclesMakes { get; set; } = null!;
-
     public override DbSet<VehicleModelModel> VehiclesModels { get; set; } = null!;
-
     public override DbSet<BestModelModel> BestModels { get; set; } = null!;
-
     public override DbSet<ModelBodyModel> ModelBodies { get; set; } = null!;
-
     public override DbSet<ModelEngineModel> EngineModels { get; set; } = null!;
+    public override DbSet<ProcessingStateModel> ProcessingQueues { get; set; } = null!;
 
     public SqlVehicleContext(
         ILogger<SqlVehicleContext> logger,
@@ -101,6 +99,15 @@ public class SqlVehicleContext
             cfg.Property(e => e.HorsePowerHp)
                 .HasColumnType("decimal(10,2)");
             cfg.Property(e => e.HorsePowerRpm)
+                .HasColumnType("decimal(10,2)");
+        });
+
+        modelBuilder.Entity<ProcessingStateModel>(cfg =>
+        {
+            cfg.HasKey(p => p.Id);
+            cfg.Property(e => e.Area)
+                .HasColumnType("varchar(255)");
+            cfg.Property(e => e.Percent)
                 .HasColumnType("decimal(10,2)");
         });
     }

@@ -38,7 +38,7 @@ public static class ApplicationServicesDiExtension
                 });
         });
 
-        serviceCollection.AddScoped<Application.Repositories.VehicleContext, Repositories.SqlVehicleContext>();
+        serviceCollection.AddScoped<Application.Repositories.BenchmarkVehicleContext, Repositories.SqlVehicleContext>();
 
         serviceCollection.AddSingleton<Application.Log.ICoreLogger, Log.InfrastructureLogger>();
         serviceCollection.AddSingleton(typeof(Application.Log.ICoreLogger<>), typeof(Log.InfrastructureLogger<>));

@@ -14,13 +14,13 @@ public class ModelRequestedToSearchHandler
 {
     private readonly IMediator _mediator;
     private readonly IVehiclesDataQuery _vehicleQuery;
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
     private readonly ICoreLogger _logger;
 
     public ModelRequestedToSearchHandler(
         IMediator mediator,
         IVehiclesDataQuery vehicleQuery, 
-        VehicleContext vehicleContext, 
+        BenchmarkVehicleContext vehicleContext, 
         ICoreLogger<ModelRequestedToSearchHandler> logger)
     {
         _mediator = mediator;

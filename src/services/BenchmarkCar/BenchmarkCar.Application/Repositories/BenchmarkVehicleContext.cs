@@ -1,9 +1,10 @@
-﻿using BenchmarkCar.Application.Model.Vehicles;
+﻿using BenchmarkCar.Application.Model.Queue;
+using BenchmarkCar.Application.Model.Vehicles;
 using Microsoft.EntityFrameworkCore;
 
 namespace BenchmarkCar.Application.Repositories;
 
-public abstract class VehicleContext
+public abstract class BenchmarkVehicleContext
     : DbContext
 {
     public abstract DbSet<VehicleMakeModel> VehiclesMakes { get; set; }
@@ -11,8 +12,9 @@ public abstract class VehicleContext
     public abstract DbSet<BestModelModel> BestModels { get; set; }
     public abstract DbSet<ModelBodyModel> ModelBodies { get; set; }
     public abstract DbSet<ModelEngineModel> EngineModels { get; set; }
+    public abstract DbSet<ProcessingStateModel> ProcessingQueues { get; set; }
 
-    public VehicleContext (DbContextOptions options)
+    public BenchmarkVehicleContext (DbContextOptions options)
         : base (options)
     {
     }

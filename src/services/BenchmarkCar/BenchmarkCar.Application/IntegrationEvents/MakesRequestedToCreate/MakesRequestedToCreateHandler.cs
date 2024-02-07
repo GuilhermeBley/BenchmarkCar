@@ -11,12 +11,12 @@ namespace BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
 public class MakesRequestedToCreateHandler
     : IIntegrationEventHandler<CreateMakesIntegrationEvent>
 {
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
     private readonly IVehiclesDataQuery _vehicleDataQuery;
     private readonly ICoreLogger<MakesRequestedToCreateHandler> _logger;
 
     public MakesRequestedToCreateHandler(
-        VehicleContext vehicleContext,
+        BenchmarkVehicleContext vehicleContext,
         IVehiclesDataQuery vehicleDataQuery,
         ICoreLogger<MakesRequestedToCreateHandler> logger)
     {

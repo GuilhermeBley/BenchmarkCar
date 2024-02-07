@@ -9,9 +9,9 @@ namespace BenchmarkCar.Application.Commands.CreateVehicleModel;
 public class CreateVehicleModelHandler
     : IRequestHandler<CreateVehicleModelRequest, CreateVehicleModelResponse>
 {
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
 
-    public CreateVehicleModelHandler(VehicleContext vehicleContext)
+    public CreateVehicleModelHandler(BenchmarkVehicleContext vehicleContext)
     {
         _vehicleContext = vehicleContext;
     }

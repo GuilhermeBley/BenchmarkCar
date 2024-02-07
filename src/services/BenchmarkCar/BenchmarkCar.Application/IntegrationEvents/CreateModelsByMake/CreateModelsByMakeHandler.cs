@@ -13,12 +13,12 @@ public class CreateModelsByMakeHandler
 {
     private readonly IVehiclesDataQuery _api;
     private readonly ICoreLogger<CreateModelsByMakeHandler> _logger;
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
 
     public CreateModelsByMakeHandler(
         IVehiclesDataQuery api,
         ICoreLogger<CreateModelsByMakeHandler> logger,
-        VehicleContext vehicleContext)
+        BenchmarkVehicleContext vehicleContext)
     {
         _api = api;
         _logger = logger;

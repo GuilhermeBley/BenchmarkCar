@@ -13,11 +13,11 @@ public class RequestVehicleMakeCreationHandler
     : IRequestHandler<RequestVehicleMakeCreationRequest, RequestVehicleMakeCreationResponse>
 {
     private readonly IEventBus _eventBus;
-    private readonly VehicleContext _vehicleContext;
+    private readonly BenchmarkVehicleContext _vehicleContext;
 
     public RequestVehicleMakeCreationHandler(
         IEventBus eventBus,
-        VehicleContext vehicleContext)
+        BenchmarkVehicleContext vehicleContext)
     {
         _eventBus = eventBus;
         _vehicleContext = vehicleContext;
