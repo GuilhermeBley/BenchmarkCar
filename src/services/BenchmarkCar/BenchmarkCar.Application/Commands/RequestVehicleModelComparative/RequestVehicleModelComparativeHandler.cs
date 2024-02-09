@@ -32,14 +32,20 @@ public class RequestVehicleModelComparativeHandler
             .FirstOrDefaultAsync(x => x.Id == request.modelIdX);
 
         if (modelX is null)
+        {
+            _logger.LogInformation("Vehicle with ID '{0}' was not found.", request.modelIdX);
             throw new NotFoundCoreException("Vehicle not found.");
+        }
 
         var modelY = await _context
             .VehiclesModels
             .FirstOrDefaultAsync(x => x.Id == request.modelIdY);
 
         if (modelY is null)
+        {
+            _logger.LogInformation("Vehicle with ID '{0}' was not found.", request.modelIdY);
             throw new NotFoundCoreException("Vehicle not found.");
+        }
 
         var entity = ProcessingState.Create(
             Guid.NewGuid(),
@@ -69,6 +75,10 @@ public class RequestVehicleModelComparativeHandler
         await transaction.CommitAsync(cancellationToken);
 
         await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Model '{0}' and '{1}' will be compared.",
+            modelX.Id,
+            modelY.Id);
 
         return new RequestVehicleModelComparativeResponse(
             ComparativeProcessingStateId: resultModel.Entity.Id);
