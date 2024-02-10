@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using BenchmarkCar.Ui.Api.Model;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BenchmarkCar.Ui.Api.Controllers;
@@ -33,7 +34,37 @@ public class VehicleModelController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("request/make/{makeId}")]
+    [HttpPost("model/request/comparative")]
+    public async Task<ActionResult> RequestToCompareModelsAsync(
+        RequestComparativeModelViewModel model,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogTrace("Requesting model comparative at {0}.", DateTimeOffset.UtcNow);
+
+        var result = await _mediator.Send(
+            new BenchmarkCar.Application.Commands.RequestVehicleModelComparative.RequestVehicleModelComparativeRequest(
+                model.ModelIdX,
+                model.ModelIdY),
+            cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("model/request/comparative/{id}")]
+    public async Task<ActionResult> GetCompareModelByIdAsync(
+        Guid id,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogTrace("Get model comparative at {0}.", DateTimeOffset.UtcNow);
+
+        var result = await _mediator.Send(
+            new BenchmarkCar.Application.Commands.GetProcessingStateById.GetProcessingStateByIdRequest(id),
+            cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPost("make/request/{makeId}")]
     public async Task<ActionResult> RequestToCreateOrUpdateModelsAsync(
         Guid makeId,
         CancellationToken cancellationToken = default)
