@@ -52,8 +52,10 @@ public class RequestVehicleModelComparativeHandler
             0.00,
             nameof(RequestVehicleModelComparativeHandler),
             string.Concat(
+                Guid.NewGuid(),
+                " - ",
                 modelX.Id,
-                '-',
+                " - ",
                 modelY.Id));
 
         using var transaction =
