@@ -79,10 +79,10 @@ public class ProcessingState
         string key)
     {
         if (!Regex.IsMatch(area, @"^[a-z0-9]{0,45}$", RegexOptions.IgnoreCase))
-            throw new CommonCoreException();
+            throw new CommonCoreException("Invalid area.");
 
-        if (!Regex.IsMatch(key, @"^[a-z0-9 - _ ]{0,100}$", RegexOptions.IgnoreCase))
-            throw new CommonCoreException();
+        if (!Regex.IsMatch(key, @"^[a-z0-9- _ ]{0,100}$", RegexOptions.IgnoreCase))
+            throw new CommonCoreException("Invalid Key.");
 
         if (IsInvalidPercent(percent))
             throw new CommonCoreException("Invalid percent. It needs to be 0 to 100.");
