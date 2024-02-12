@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Collections.Immutable;
+using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 
 namespace BenchmarkCar.Domain.Entities.Queue;
 
@@ -10,37 +12,25 @@ public class ProcessingState
     public double Percent { get; private set; }
     public string Area { get; private set; }
     public string Key { get; private set; }
+    public IReadOnlyDictionary<string, object> MetaData { get; private set; }
 
     private ProcessingState(
         Guid id, 
-        ProcessingStateCode code, 
-        double percent, 
-        string area, 
-        string key)
+        ProcessingStateCode code,
+        double percent,
+        string area,
+        string key,
+        IReadOnlyDictionary<string, object> metaData)
     {
         Id = id;
         Code = code;
         Percent = percent;
         Area = area;
         Key = key;
+        MetaData = metaData;
     }
 
-    public override bool Equals(object? obj)
-    {
-        return obj is ProcessingState state &&
-               base.Equals(obj) &&
-               EntityId.Equals(state.EntityId) &&
-               Id.Equals(state.Id) &&
-               Code == state.Code &&
-               Percent == state.Percent &&
-               Area == state.Area &&
-               Key == state.Key;
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(base.GetHashCode(), EntityId, Id, Code, Percent, Area, Key);
-    }
+    
 
     public bool IsProcessFinished()
         => Code != ProcessingStateCode.Running;
@@ -72,11 +62,42 @@ public class ProcessingState
         Code = code;
     }
 
+    public override bool Equals(object? obj)
+    {
+        return obj is ProcessingState state &&
+               base.Equals(obj) &&
+               EntityId.Equals(state.EntityId) &&
+               Id.Equals(state.Id) &&
+               Code == state.Code &&
+               Percent == state.Percent &&
+               Area == state.Area &&
+               Key == state.Key &&
+               EqualityComparer<IReadOnlyDictionary<string, object>>.Default.Equals(MetaData, state.MetaData);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(base.GetHashCode(), EntityId, Id, Code, Percent, Area, Key, MetaData);
+    }
+
     public static ProcessingState Create(
         Guid id,
         double percent,
         string area,
         string key)
+        => Create(
+            id: id,
+            percent: percent,
+            area: area,
+            key: key,
+            metaData: ImmutableDictionary<string, object>.Empty);
+
+    public static ProcessingState Create(
+        Guid id,
+        double percent,
+        string area,
+        string key,
+        IReadOnlyDictionary<string, object> metaData)
     {
         if (!Regex.IsMatch(area, @"^[a-z0-9]{0,45}$", RegexOptions.IgnoreCase))
             throw new CommonCoreException("Invalid area.");
@@ -92,7 +113,8 @@ public class ProcessingState
             code: ProcessingStateCode.Running,
             percent: percent,
             area: area,
-            key: key);
+            key: key,
+            metaData: metaData);
     }
 
     private static bool IsInvalidPercent(double percent)
