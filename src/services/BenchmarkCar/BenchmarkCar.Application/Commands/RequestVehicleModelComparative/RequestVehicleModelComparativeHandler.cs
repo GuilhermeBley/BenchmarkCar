@@ -56,7 +56,12 @@ public class RequestVehicleModelComparativeHandler
                 " - ",
                 modelX.Id,
                 " - ",
-                modelY.Id));
+                modelY.Id),
+            metaData: new Dictionary<string, object>
+            {
+                { nameof(modelX), modelX },
+                { nameof(modelY), modelY }
+            });
 
         using var transaction =
             await _context.Database.BeginTransactionAsync(cancellationToken);
