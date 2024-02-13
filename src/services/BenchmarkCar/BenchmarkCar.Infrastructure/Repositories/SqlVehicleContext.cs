@@ -109,6 +109,8 @@ public class SqlVehicleContext
                 .HasColumnType("varchar(255)");
             cfg.Property(e => e.Percent)
                 .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.MetaData)
+                .HasColumnType("VARCHAR(MAX)");
         });
     }
 }
