@@ -26,6 +26,8 @@ builder.Services.AddEventBus(
             BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc.ModelRequestedToSearchHandler>();
         eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateMakesIntegrationEvent,
             BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate.MakesRequestedToCreateHandler>();
+        eventBus.Subscribe<BenchmarkCar.EventBus.Events.RequestComparativeModelIntegrationEvent,
+            BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative.CreateVehicleComparativeHandler>();
     });
 
 builder.Services.AddOptions<BenchmarkCar.Infrastructure.Options.CarApiOptions>()
