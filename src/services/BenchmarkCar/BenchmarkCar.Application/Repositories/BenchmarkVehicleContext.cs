@@ -13,6 +13,7 @@ public abstract class BenchmarkVehicleContext
     public abstract DbSet<ModelBodyModel> ModelBodies { get; set; }
     public abstract DbSet<ModelEngineModel> EngineModels { get; set; }
     public abstract DbSet<ProcessingStateModel> ProcessingQueues { get; set; }
+    public abstract DbSet<ProcessingResultModel> ProcessingResults { get; set; }
 
     public BenchmarkVehicleContext (DbContextOptions options)
         : base (options)

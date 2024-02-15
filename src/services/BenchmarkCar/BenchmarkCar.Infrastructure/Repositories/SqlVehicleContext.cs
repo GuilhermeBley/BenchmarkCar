@@ -20,6 +20,7 @@ public class SqlVehicleContext
     public override DbSet<ModelBodyModel> ModelBodies { get; set; } = null!;
     public override DbSet<ModelEngineModel> EngineModels { get; set; } = null!;
     public override DbSet<ProcessingStateModel> ProcessingQueues { get; set; } = null!;
+    public override DbSet<ProcessingResultModel> ProcessingResults { get; set; } = null!;
 
     public SqlVehicleContext(
         ILogger<SqlVehicleContext> logger,
@@ -111,6 +112,16 @@ public class SqlVehicleContext
                 .HasColumnType("decimal(10,2)");
             cfg.Property(e => e.MetaData)
                 .HasColumnType("VARCHAR(MAX)");
+        });
+
+        modelBuilder.Entity<ProcessingResultModel>(cfg =>
+        {
+            cfg.HasKey(p => p.LinkedProccessId);
+            cfg.Property(e => e.Data)
+                .HasColumnType("varchar(MAX)");
+            cfg.HasOne<ProcessingStateModel>()
+                .WithMany()
+                .HasForeignKey(e => e.LinkedProccessId);
         });
     }
 }
