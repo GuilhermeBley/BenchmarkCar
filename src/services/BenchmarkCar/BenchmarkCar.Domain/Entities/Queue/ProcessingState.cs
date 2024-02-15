@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 
@@ -14,6 +15,7 @@ public class ProcessingState
     public string Key { get; private set; }
     public IReadOnlyDictionary<string, object> MetaData { get; private set; }
     public DateTimeOffset Expiration { get; private set; }
+    public ProcessingResult? Result { get; private set; }
 
     private ProcessingState(
         Guid id,
@@ -32,8 +34,6 @@ public class ProcessingState
         MetaData = metaData;
         Expiration = expiration;
     }
-
-
 
     public bool IsProcessFinished()
         => Code != ProcessingStateCode.Running;
@@ -63,6 +63,35 @@ public class ProcessingState
             return;
 
         Code = code;
+    }
+
+    public bool TrySetResult(
+        object? resultData,
+        DateTimeOffset? expirationDate = null)
+    {
+        if (Result is not null)
+            return false;
+
+        DateTimeOffset expirationDateToCheck =
+            expirationDate ??
+            DateTimeOffset.UtcNow.AddHours(1);
+
+        if (!ProcessingResult.IsValidadExpirationDate(expirationDateToCheck))
+            return false;
+
+        try
+        {
+            Result = new(
+                LinkedProccessId: this.Id,
+                Data: resultData,
+                ExpirationDate: expirationDateToCheck);
+        }
+        catch
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public override bool Equals(object? obj)
