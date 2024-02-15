@@ -9,6 +9,7 @@ public class CreateVehicleComparativeHandler
     : IIntegrationEventHandler<EventBus.Events.RequestComparativeModelIntegrationEvent>
 {
     private readonly BenchmarkVehicleContext _vehicleContext;
+    // add logs
 
     public async Task Handle(
         RequestComparativeModelIntegrationEvent @event, 
@@ -50,8 +51,31 @@ public class CreateVehicleComparativeHandler
         throw new NotImplementedException();
     }
 
-    private Task MarkProccessAsErrorAsync(Guid proccessId)
+    private async Task MarkProccessAsErrorAsync(
+        Guid proccessId,
+        CancellationToken cancellationToken = default)
     {
-        return Task.CompletedTask;
+        var processingQueueStateModel =
+            (await _vehicleContext
+                .ProcessingQueues
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == proccessId, cancellationToken));
+
+        if (processingQueueStateModel is null)
+            return;
+
+        var processingQueueState = processingQueueStateModel.MapToEntity();
+
+        try
+        {
+            processingQueueState.FinishWithStatusCode(Domain.Entities.Queue.ProcessingStateCode.StopedWitError);
+        }
+        catch { }
+
+        processingQueueStateModel.Code = (int)processingQueueState.Code;
+
+        _vehicleContext.ProcessingQueues.Update(processingQueueStateModel);
+
+        await _vehicleContext.SaveChangesAsync();
     }
 }
