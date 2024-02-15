@@ -14,7 +14,6 @@ public class ProcessingState
     public string Area { get; private set; }
     public string Key { get; private set; }
     public IReadOnlyDictionary<string, object> MetaData { get; private set; }
-    public DateTimeOffset Expiration { get; private set; }
     public ProcessingResult? Result { get; private set; }
 
     private ProcessingState(
@@ -23,8 +22,7 @@ public class ProcessingState
         double percent,
         string area,
         string key,
-        IReadOnlyDictionary<string, object> metaData,
-        DateTimeOffset expiration)
+        IReadOnlyDictionary<string, object> metaData)
     {
         Id = id;
         Code = code;
@@ -32,7 +30,6 @@ public class ProcessingState
         Area = area;
         Key = key;
         MetaData = metaData;
-        Expiration = expiration;
     }
 
     public bool IsProcessFinished()
@@ -104,8 +101,7 @@ public class ProcessingState
                Percent == state.Percent &&
                Area == state.Area &&
                Key == state.Key &&
-               EqualityComparer<IReadOnlyDictionary<string, object>>.Default.Equals(MetaData, state.MetaData) &&
-               Expiration.Equals(state.Expiration);
+               EqualityComparer<IReadOnlyDictionary<string, object>>.Default.Equals(MetaData, state.MetaData);
     }
 
     public override int GetHashCode()
@@ -119,7 +115,6 @@ public class ProcessingState
         hash.Add(Area);
         hash.Add(Key);
         hash.Add(MetaData);
-        hash.Add(Expiration);
         return hash.ToHashCode();
     }
 
@@ -127,23 +122,20 @@ public class ProcessingState
         Guid id,
         double percent,
         string area,
-        string key,
-        DateTimeOffset? expirationDate = null)
+        string key)
         => Create(
             id: id,
             percent: percent,
             area: area,
             key: key,
-            metaData: ImmutableDictionary<string, object>.Empty,
-            expirationDate: expirationDate ?? DateTimeOffset.UtcNow.AddHours(2));
+            metaData: ImmutableDictionary<string, object>.Empty);
 
     public static ProcessingState Create(
         Guid id,
         double percent,
         string area,
         string key,
-        IReadOnlyDictionary<string, object> metaData,
-        DateTimeOffset expirationDate)
+        IReadOnlyDictionary<string, object> metaData)
     {
         if (!Regex.IsMatch(area, @"^[a-z0-9]{0,45}$", RegexOptions.IgnoreCase))
             throw new CommonCoreException("Invalid area.");
@@ -154,17 +146,13 @@ public class ProcessingState
         if (IsInvalidPercent(percent))
             throw new CommonCoreException("Invalid percent. It needs to be 0 to 100.");
 
-        if (expirationDate < DateTimeOffset.Now.AddHours(1))
-            throw new CommonCoreException("Expiration date should be at min greater than one hour.");
-
         return new ProcessingState(
             id: id,
             code: ProcessingStateCode.Running,
             percent: percent,
             area: area,
             key: key,
-            metaData: metaData,
-            expiration: expirationDate);
+            metaData: metaData);
     }
 
     private static bool IsInvalidPercent(double percent)
