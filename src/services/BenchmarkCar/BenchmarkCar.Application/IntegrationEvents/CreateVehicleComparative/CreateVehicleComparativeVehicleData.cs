@@ -1,0 +1,3 @@
+﻿namespace BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
+
+public record CreateVehicleComparativeVehicleData;

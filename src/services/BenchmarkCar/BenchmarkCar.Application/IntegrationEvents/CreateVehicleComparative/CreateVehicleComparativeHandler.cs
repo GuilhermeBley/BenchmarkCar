@@ -1,4 +1,5 @@
-﻿using BenchmarkCar.Application.Repositories;
+﻿using BenchmarkCar.Application.ExternalApi;
+using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.EventBus.Abstractions;
 using BenchmarkCar.EventBus.Events;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ public class CreateVehicleComparativeHandler
     : IIntegrationEventHandler<EventBus.Events.RequestComparativeModelIntegrationEvent>
 {
     private readonly BenchmarkVehicleContext _vehicleContext;
+    private readonly IVehiclesDataQuery _api;
     // add logs
 
     public async Task Handle(

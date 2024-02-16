@@ -1,4 +1,5 @@
 ﻿using BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake;
+using BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
 using BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
 using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
 
@@ -14,5 +15,9 @@ public interface IVehiclesDataQuery
 
     IAsyncEnumerable<CreateApiModelSummaryModel> GetByModelsSummaryByMakeAsync(
         object makeId,
+        CancellationToken cancellationToken = default);
+
+    Task<CreateVehicleComparativeVehicleData> GetDataByModelIdAsync(
+        object modelId,
         CancellationToken cancellationToken = default);
 }
