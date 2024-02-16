@@ -17,7 +17,7 @@ public interface IVehiclesDataQuery
         object makeId,
         CancellationToken cancellationToken = default);
 
-    Task<CreateVehicleComparativeVehicleData> GetDataByModelIdAsync(
+    Task<CreateVehicleComparativeVehicleDataModel> GetDataByModelIdAsync(
         object modelId,
         CancellationToken cancellationToken = default);
 }

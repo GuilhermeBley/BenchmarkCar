@@ -1,5 +1,7 @@
 ﻿using BenchmarkCar.Application.ExternalApi;
+using BenchmarkCar.Application.Model.Vehicles;
 using BenchmarkCar.Application.Repositories;
+using BenchmarkCar.Domain.Entities.Vehicles;
 using BenchmarkCar.EventBus.Abstractions;
 using BenchmarkCar.EventBus.Events;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +11,9 @@ namespace BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
 public class CreateVehicleComparativeHandler
     : IIntegrationEventHandler<EventBus.Events.RequestComparativeModelIntegrationEvent>
 {
+    private static readonly SemaphoreSlim _lockVehicleCollectModelInfo 
+        = new SemaphoreSlim(1, 1);
+
     private readonly BenchmarkVehicleContext _vehicleContext;
     private readonly IVehiclesDataQuery _api;
     // add logs
@@ -80,4 +85,61 @@ public class CreateVehicleComparativeHandler
 
         await _vehicleContext.SaveChangesAsync();
     }
+
+    private async Task<VehicleDataResult> GetCachedOrCollectVehicleDataAsync(
+        Guid modelId,
+        object externalModelId,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await TryGetCachedAsync(modelId, cancellationToken);
+
+        if (result is not null)
+            return result;
+
+        try
+        {
+            await _lockVehicleCollectModelInfo.WaitAsync(cancellationToken);
+
+            // Checking again
+            result = await TryGetCachedAsync(modelId, cancellationToken);
+
+            if (result is not null)
+                return result;
+
+            // collect data by api
+            throw new NotImplementedException();
+        }
+        finally
+        {
+            _lockVehicleCollectModelInfo.Release();
+        }
+    }
+
+    private async Task<VehicleDataResult?> TryGetCachedAsync(
+        Guid modelId,
+        CancellationToken cancellationToken = default)
+    {
+
+        var body =
+            await _vehicleContext
+                .ModelBodies
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.ModelId == modelId, cancellationToken);
+
+        var engine =
+            await _vehicleContext
+                .EngineModels
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.ModelId == modelId, cancellationToken);
+
+        if (engine is not null &&
+            body is not null)
+            return new(engine, body);
+
+        return null;
+    }
+
+    private record VehicleDataResult(
+        ModelEngineModel Engine,
+        ModelBodyModel Body);
 }
