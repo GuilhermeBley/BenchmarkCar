@@ -1,7 +1,7 @@
-﻿using BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake;
+﻿using BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
+using BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake;
 using BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
 using BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
-using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
 
 namespace BenchmarkCar.Application.ExternalApi;
 

@@ -1,7 +1,6 @@
-﻿using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
-using MediatR;
+﻿using MediatR;
 
-namespace BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
+namespace BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 
 public record CreateVehicleModelDetailsRequest(
     Guid ModelId,

@@ -1,4 +1,4 @@
-﻿namespace BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
+﻿namespace BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 
 public record CreateBodyModel(
     string ExternalId,

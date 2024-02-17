@@ -4,7 +4,7 @@ using BenchmarkCar.Domain.Entities.Vehicles;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
+namespace BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 
 public class CreateVehicleModelDetailsHandler
     : IRequestHandler<CreateVehicleModelDetailsRequest, CreateVehicleModelDetailsResponse>
