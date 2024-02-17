@@ -1,4 +1,5 @@
-﻿using BenchmarkCar.Application.ExternalApi;
+﻿using BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
+using BenchmarkCar.Application.ExternalApi;
 using BenchmarkCar.Application.Model.Vehicles;
 using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.EventBus.Abstractions;
@@ -56,7 +57,14 @@ public class CreateVehicleComparativeHandler
             return;
         }
 
-        throw new NotImplementedException();
+        var vehicleDataResultX = await GetCachedOrCollectVehicleDataAsync(
+            modelId: vehicleX.Id, cancellationToken);
+        
+
+        var vehicleDataResultY = await GetCachedOrCollectVehicleDataAsync(
+            modelId: vehicleY.Id, cancellationToken);
+
+
     }
 
     private async Task MarkProccessAsErrorAsync(
@@ -109,14 +117,21 @@ public class CreateVehicleComparativeHandler
 
             var apiResult = await _api.GetByExternalModelId(externalModelId, cancellationToken);
 
-            // send to mediatr CreateVehicleModelDetailsRequest
-
-            throw new NotImplementedException();
+            // send to mediatr cache info on data base
+            await _mediator.Send(new CreateVehicleModelDetailsRequest
+            (
+                ModelId: modelId,
+                Engine: apiResult.Engine,
+                Body: apiResult.Body
+            ), cancellationToken);
         }
         finally
         {
             _lockVehicleCollectModelInfo.Release();
         }
+
+        return await TryGetCachedAsync(modelId, cancellationToken)
+            ?? throw new CommonCoreException("Failed to get data.");
     }
 
     private async Task<VehicleDataResult?> TryGetCachedAsync(
