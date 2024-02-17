@@ -1,4 +1,4 @@
-﻿namespace BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
+﻿namespace BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
 
 public record CreateBodyModel(
     string ExternalId,

@@ -22,8 +22,6 @@ builder.Services.AddEventBus(
     {
         eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateModelsByMakeIntegrationEvent,
             BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake.CreateModelsByMakeHandler>();
-        eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateModelIntegrationEvent,
-            BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc.ModelRequestedToSearchHandler>();
         eventBus.Subscribe<BenchmarkCar.EventBus.Events.CreateMakesIntegrationEvent,
             BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate.MakesRequestedToCreateHandler>();
         eventBus.Subscribe<BenchmarkCar.EventBus.Events.RequestComparativeModelIntegrationEvent,

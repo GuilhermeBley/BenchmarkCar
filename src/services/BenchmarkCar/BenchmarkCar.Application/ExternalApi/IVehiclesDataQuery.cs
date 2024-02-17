@@ -1,13 +1,13 @@
 ﻿using BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake;
 using BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
 using BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
-using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
+using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
 
 namespace BenchmarkCar.Application.ExternalApi;
 
 public interface IVehiclesDataQuery
 {
-    Task<CreateVehicleModelApiDetails> GetByExternalModelId(
+    Task<CreateVehicleModelDetailsRequest> GetByExternalModelId(
         object modelId, 
         CancellationToken cancellationToken = default);
     IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync(

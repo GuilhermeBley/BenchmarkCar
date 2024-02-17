@@ -1,4 +1,4 @@
-﻿using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
+﻿using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
 
 namespace BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
 

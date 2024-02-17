@@ -1,7 +1,7 @@
 ﻿using BenchmarkCar.Application.ExternalApi;
 using BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake;
 using BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
-using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearc;
+using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
 using BenchmarkCar.Infrastructure.Model.CarApi;
 using BenchmarkCar.Infrastructure.Options;
 using Microsoft.Extensions.Options;
@@ -64,7 +64,7 @@ internal class CarApiVehiclesDataQuery
         _options = options;
     }
 
-    public async Task<CreateVehicleModelApiDetails> GetByExternalModelId(
+    public async Task<CreateVehicleModelDetailsRequest> GetByExternalModelId(
         object modelId,
         CancellationToken cancellationToken = default)
     {
@@ -100,7 +100,7 @@ internal class CarApiVehiclesDataQuery
 
         ArgumentNullException.ThrowIfNull(createEngineModel, nameof(createEngineModel));
 
-        return new CreateVehicleModelApiDetails(
+        return new CreateVehicleModelDetailsRequest(
             createBodyModel,
             createEngineModel);
     }

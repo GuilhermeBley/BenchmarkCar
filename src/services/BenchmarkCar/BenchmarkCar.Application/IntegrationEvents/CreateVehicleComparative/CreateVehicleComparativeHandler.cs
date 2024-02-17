@@ -1,4 +1,5 @@
 ﻿using BenchmarkCar.Application.ExternalApi;
+using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
 using BenchmarkCar.Application.Model.Vehicles;
 using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.Domain.Entities.Vehicles;
@@ -16,6 +17,7 @@ public class CreateVehicleComparativeHandler
 
     private readonly BenchmarkVehicleContext _vehicleContext;
     private readonly IVehiclesDataQuery _api;
+    private readonly IEventBus _eventBus;
     // add logs
 
     public async Task Handle(
@@ -106,8 +108,10 @@ public class CreateVehicleComparativeHandler
             if (result is not null)
                 return result;
 
-            // collect data by api
-            throw new NotImplementedException();
+            var apiResult = await _api.GetByExternalModelId(externalModelId, cancellationToken);
+            _eventBus.PublishAsync(
+                new CreateVehicleModelApiDetails())
+            new VehicleDataResult(apiResult.Engine, apiResult.Body);
         }
         finally
         {
