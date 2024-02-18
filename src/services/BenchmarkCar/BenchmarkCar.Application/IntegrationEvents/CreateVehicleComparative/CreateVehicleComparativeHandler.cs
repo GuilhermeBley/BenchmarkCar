@@ -19,7 +19,19 @@ public class CreateVehicleComparativeHandler
     private readonly BenchmarkVehicleContext _vehicleContext;
     private readonly IVehiclesDataQuery _api;
     private readonly IMediator _mediator;
-    // add logs
+    private readonly ICoreLogger<CreateVehicleComparativeHandler> _logger;
+
+    public CreateVehicleComparativeHandler(
+        BenchmarkVehicleContext vehicleContext, 
+        IVehiclesDataQuery api, 
+        IMediator mediator, 
+        ICoreLogger<CreateVehicleComparativeHandler> logger)
+    {
+        _vehicleContext = vehicleContext;
+        _api = api;
+        _mediator = mediator;
+        _logger = logger;
+    }
 
     public async Task Handle(
         RequestComparativeModelIntegrationEvent @event,
@@ -41,6 +53,7 @@ public class CreateVehicleComparativeHandler
 
         if (vehicleX is null)
         {
+            _logger.LogInformation("Vehicle '{0}' was not found.", @event.ModelIdX);
             await MarkProccessAsErrorAsync(@event.ProccessId);
             return;
         }
@@ -54,6 +67,7 @@ public class CreateVehicleComparativeHandler
 
         if (vehicleY is null)
         {
+            _logger.LogInformation("Vehicle '{0}' was not found.", @event.ModelIdY);
             await MarkProccessAsErrorAsync(@event.ProccessId);
             return;
         }
@@ -68,6 +82,11 @@ public class CreateVehicleComparativeHandler
             @event.ProccessId,
             new { bestModel, vehicleDataResultX, vehicleDataResultY },
             cancellationToken);
+
+        _logger.LogInformation(
+            "Vehicles '{0}' and '{1} are successfully collecteds.", 
+            @event.ModelIdX,
+            @event.ModelIdY);
     }
 
     private async Task MarkProccessAsErrorAsync(
