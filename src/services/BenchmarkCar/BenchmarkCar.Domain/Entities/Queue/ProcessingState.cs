@@ -41,8 +41,11 @@ public class ProcessingState
         if (IsInvalidPercent(percent))
             throw new CommonCoreException("Invalid percent. It needs to be 0 to 100.");
 
-        if (Code != ProcessingStateCode.Running)
-            throw new CommonCoreException("");
+        if (Code == ProcessingStateCode.Processed)
+        {
+            Percent = 100;
+            return;
+        }
 
         if (percent >= 100)
             Code = ProcessingStateCode.Processed;
@@ -53,7 +56,7 @@ public class ProcessingState
     public void FinishWithStatusCode(
         ProcessingStateCode code)
     {
-        if (Code == ProcessingStateCode.Running)
+        if (code == ProcessingStateCode.Running)
             throw new CommonCoreException($"Current state '{Code}' can't be changed to '{code}'.");
 
         if (code == Code)

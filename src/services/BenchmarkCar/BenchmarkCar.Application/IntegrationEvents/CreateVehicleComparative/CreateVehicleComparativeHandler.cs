@@ -79,7 +79,7 @@ public class CreateVehicleComparativeHandler
 
         var vehicleDataResultY = await GetCachedOrCollectVehicleDataAsync(
             modelId: vehicleY.Id, 
-            externalModelId: vehicleY.Id,
+            externalModelId: vehicleY.ExternalId,
             cancellationToken: cancellationToken);
 
         await MarkProccessAsCompletedAsync(

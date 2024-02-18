@@ -56,9 +56,6 @@ public class CreateVehicleModelDetailsHandler
         if (request.Body is not null)
             modelBody = MapBody(vehicleEntity.Id, request.Body);
 
-        await using var transaction =
-            await _vehicleContext.Database.BeginTransactionAsync(cancellationToken);
-
         ModelEngineModel? engineModelCreated = null;
         ModelBodyModel? bodyModelCreated = null;
 
@@ -77,8 +74,6 @@ public class CreateVehicleModelDetailsHandler
             if (!containsBody)
                 bodyModelCreated = (await _vehicleContext.ModelBodies.AddAsync(ModelBodyModel.MapFromEntity(modelBody))).Entity;
         }
-
-        await transaction.CommitAsync(cancellationToken);
 
         await _vehicleContext.SaveChangesAsync(cancellationToken);
 
