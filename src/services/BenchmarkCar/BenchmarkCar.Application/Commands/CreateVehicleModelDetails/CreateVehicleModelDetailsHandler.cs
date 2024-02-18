@@ -31,7 +31,15 @@ public class CreateVehicleModelDetailsHandler
             .Where(m => m.Id == request.ModelId)
             .FirstOrDefaultAsync();
 
-        if (vehicleModel is null)
+        if (vehicleModel is not null)
+            vehicleModel.VehicleMake
+                = await _vehicleContext
+                .VehiclesMakes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == vehicleModel.VehicleMakeId);
+
+        if (vehicleModel is null ||
+            vehicleModel.VehicleMake is null)
         {
             _logger.LogInformation("Model '{0}' not found.", request.ModelId);
             throw new NotFoundCoreException("Model not found.");
@@ -70,9 +78,9 @@ public class CreateVehicleModelDetailsHandler
                 bodyModelCreated = (await _vehicleContext.ModelBodies.AddAsync(ModelBodyModel.MapFromEntity(modelBody))).Entity;
         }
 
-        await _vehicleContext.SaveChangesAsync(cancellationToken);
-
         await transaction.CommitAsync(cancellationToken);
+
+        await _vehicleContext.SaveChangesAsync(cancellationToken);
 
         _logger.LogInformation("Engine '{0}' and '{1}' was successfully added.", engineModelCreated?.ExternalId, bodyModelCreated?.ExternalId);
         return new();

@@ -6,7 +6,7 @@ public class VehicleModelModel
 {
     public Guid Id { get; set; }
     public Guid VehicleMakeId { get; set; }
-    public VehicleMakeModel VehicleMake { get; set; } = null!;
+    public VehicleMakeModel? VehicleMake { get; set; }
     public string Name { get; set; } = string.Empty;
     public int Year { get; set; }
     public string NormalizedName { get; set; } = string.Empty;
@@ -17,7 +17,8 @@ public class VehicleModelModel
     public VehicleModel MapToEntity()
         => VehicleModel.Create(
             id: Id,
-            vehicleMake: VehicleMake.MapToEntity(),
+            vehicleMake: VehicleMake?.MapToEntity() 
+                ?? throw new CommonCoreException("Vehicle make is required to map."),
             name: Name,
             year: Year,
             description: Description,
