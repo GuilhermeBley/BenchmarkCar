@@ -6,4 +6,5 @@ namespace BenchmarkCar.Application.Commands.GetProcessingStateById;
 public record GetProcessingStateByIdResponse(
     Guid Id,
     int Code,
-    double Percent);
+    double Percent,
+    object? Result = null);

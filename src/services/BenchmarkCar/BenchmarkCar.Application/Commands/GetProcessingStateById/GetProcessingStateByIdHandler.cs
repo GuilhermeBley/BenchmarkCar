@@ -1,6 +1,8 @@
 ﻿using BenchmarkCar.Application.Repositories;
+using BenchmarkCar.Domain.Entities.Queue;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace BenchmarkCar.Application.Commands.GetProcessingStateById;
 
@@ -32,12 +34,25 @@ public class GetProcessingStateByIdHandler
 
         if (processingFound is null)
             throw new NotFoundCoreException("Proccess not found.");
+        
+        object? result = null;
+        if (processingFound.Code == (int)ProcessingStateCode.Processed)
+        {
+            var jsonText = (await _context
+                .ProcessingResults
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.LinkedProccessId == processingFound.Id, cancellationToken))?
+                .Data;
+            if (!string.IsNullOrWhiteSpace(jsonText))
+                result = JsonSerializer.Deserialize<dynamic>(jsonText);
+        }
 
         _logger.LogInformation("Processing '{0}' sucessfully found.", processingFound.Id);
 
         return new GetProcessingStateByIdResponse(
             processingFound.Id,
             processingFound.Code,
-            processingFound.Percent);
+            processingFound.Percent,
+            Result: result);
     }
 }
