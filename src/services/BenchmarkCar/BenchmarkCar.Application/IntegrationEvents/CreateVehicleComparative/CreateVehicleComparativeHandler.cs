@@ -1,5 +1,6 @@
 ﻿using BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 using BenchmarkCar.Application.ExternalApi;
+using BenchmarkCar.Application.Model.Queue;
 using BenchmarkCar.Application.Model.Vehicles;
 using BenchmarkCar.Application.Repositories;
 using BenchmarkCar.EventBus.Abstractions;
@@ -12,7 +13,7 @@ namespace BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
 public class CreateVehicleComparativeHandler
     : IIntegrationEventHandler<EventBus.Events.RequestComparativeModelIntegrationEvent>
 {
-    private static readonly SemaphoreSlim _lockVehicleCollectModelInfo 
+    private static readonly SemaphoreSlim _lockVehicleCollectModelInfo
         = new SemaphoreSlim(1, 1);
 
     private readonly BenchmarkVehicleContext _vehicleContext;
@@ -21,7 +22,7 @@ public class CreateVehicleComparativeHandler
     // add logs
 
     public async Task Handle(
-        RequestComparativeModelIntegrationEvent @event, 
+        RequestComparativeModelIntegrationEvent @event,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -32,7 +33,7 @@ public class CreateVehicleComparativeHandler
             .AsNoTracking()
             .FirstOrDefaultAsync();
 
-        var vehicleX = 
+        var vehicleX =
             await _vehicleContext
             .VehiclesModels
             .AsNoTracking()
@@ -44,7 +45,7 @@ public class CreateVehicleComparativeHandler
             return;
         }
 
-        var vehicleY = 
+        var vehicleY =
             await _vehicleContext
             .VehiclesModels
             .AsNoTracking()
@@ -59,12 +60,14 @@ public class CreateVehicleComparativeHandler
 
         var vehicleDataResultX = await GetCachedOrCollectVehicleDataAsync(
             modelId: vehicleX.Id, cancellationToken);
-        
 
         var vehicleDataResultY = await GetCachedOrCollectVehicleDataAsync(
             modelId: vehicleY.Id, cancellationToken);
 
-
+        await MarkProccessAsCompletedAsync(
+            @event.ProccessId,
+            new { bestModel, vehicleDataResultX, vehicleDataResultY },
+            cancellationToken);
     }
 
     private async Task MarkProccessAsErrorAsync(
@@ -93,6 +96,45 @@ public class CreateVehicleComparativeHandler
         _vehicleContext.ProcessingQueues.Update(processingQueueStateModel);
 
         await _vehicleContext.SaveChangesAsync();
+    }
+
+    private async Task MarkProccessAsCompletedAsync<T>(
+        Guid proccessId,
+        T result,
+        CancellationToken cancellationToken = default)
+    {
+        var processingQueueStateModel =
+            (await _vehicleContext
+                .ProcessingQueues
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == proccessId, cancellationToken));
+
+        if (processingQueueStateModel is null)
+            return;
+
+        var processingQueueState = processingQueueStateModel.MapToEntity();
+
+        try
+        {
+            processingQueueState.FinishWithStatusCode(Domain.Entities.Queue.ProcessingStateCode.Processed);
+            processingQueueState.ChangePercentTo(100);
+            processingQueueState.TrySetResult(result);
+        }
+        catch { }
+
+        processingQueueStateModel.Code = (int)processingQueueState.Code;
+
+        using var transaction =
+            await _vehicleContext.Database.BeginTransactionAsync(cancellationToken);
+
+        _vehicleContext.ProcessingQueues.Update(processingQueueStateModel);
+        if (processingQueueState.Result is not null)
+            await _vehicleContext.ProcessingResults.AddAsync(
+                ProcessingResultModel.MapFrom(processingQueueState.Result));
+
+        await transaction.CommitAsync(cancellationToken);
+
+        await _vehicleContext.SaveChangesAsync(cancellationToken);
     }
 
     private async Task<VehicleDataResult> GetCachedOrCollectVehicleDataAsync(
