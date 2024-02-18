@@ -1,4 +1,4 @@
-﻿using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
+﻿using BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 using BenchmarkCar.Domain.Entities;
 using System.Text.Json.Serialization;
 

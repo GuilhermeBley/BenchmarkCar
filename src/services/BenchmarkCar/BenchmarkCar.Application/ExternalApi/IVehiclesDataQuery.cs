@@ -7,7 +7,7 @@ namespace BenchmarkCar.Application.ExternalApi;
 
 public interface IVehiclesDataQuery
 {
-    Task<CreateVehicleModelDetailsRequest> GetByExternalModelId(
+    Task<CreateVehicleComparativeVehicleDataModel> GetByExternalModelId(
         object modelId, 
         CancellationToken cancellationToken = default);
     IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync(
@@ -15,9 +15,5 @@ public interface IVehiclesDataQuery
 
     IAsyncEnumerable<CreateApiModelSummaryModel> GetByModelsSummaryByMakeAsync(
         object makeId,
-        CancellationToken cancellationToken = default);
-
-    Task<CreateVehicleComparativeVehicleDataModel> GetDataByModelIdAsync(
-        object modelId,
         CancellationToken cancellationToken = default);
 }

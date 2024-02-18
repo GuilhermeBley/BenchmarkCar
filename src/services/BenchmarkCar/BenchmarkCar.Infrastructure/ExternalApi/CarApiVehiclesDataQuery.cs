@@ -1,14 +1,14 @@
-﻿using BenchmarkCar.Application.ExternalApi;
+﻿using BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
+using BenchmarkCar.Application.ExternalApi;
 using BenchmarkCar.Application.IntegrationEvents.CreateModelsByMake;
+using BenchmarkCar.Application.IntegrationEvents.CreateVehicleComparative;
 using BenchmarkCar.Application.IntegrationEvents.MakesRequestedToCreate;
-using BenchmarkCar.Application.IntegrationEvents.ModelRequestedToSearch;
 using BenchmarkCar.Infrastructure.Model.CarApi;
 using BenchmarkCar.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
-using System.Threading;
 
 namespace BenchmarkCar.Infrastructure.ExternalApi;
 
@@ -64,7 +64,7 @@ internal class CarApiVehiclesDataQuery
         _options = options;
     }
 
-    public async Task<CreateVehicleModelDetailsRequest> GetByExternalModelId(
+    public async Task<CreateVehicleComparativeVehicleDataModel> GetByExternalModelId(
         object modelId,
         CancellationToken cancellationToken = default)
     {
@@ -100,9 +100,9 @@ internal class CarApiVehiclesDataQuery
 
         ArgumentNullException.ThrowIfNull(createEngineModel, nameof(createEngineModel));
 
-        return new CreateVehicleModelDetailsRequest(
-            createBodyModel,
-            createEngineModel);
+        return new CreateVehicleComparativeVehicleDataModel(
+            createEngineModel,
+            createBodyModel);
     }
 
     public async IAsyncEnumerable<CreateMakeModel> GetAllMakesAsync(
