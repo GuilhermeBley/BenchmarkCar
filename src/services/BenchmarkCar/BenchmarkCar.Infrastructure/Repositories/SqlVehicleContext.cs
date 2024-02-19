@@ -101,6 +101,8 @@ public class SqlVehicleContext
                 .HasColumnType("decimal(10,2)");
             cfg.Property(e => e.HorsePowerRpm)
                 .HasColumnType("decimal(10,2)");
+            cfg.Property(e => e.EngineSize)
+                .HasColumnType("decimal(10,2)");
         });
 
         modelBuilder.Entity<ProcessingStateModel>(cfg =>

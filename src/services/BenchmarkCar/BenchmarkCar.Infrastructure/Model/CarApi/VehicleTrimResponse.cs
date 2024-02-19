@@ -1,5 +1,7 @@
 ﻿using BenchmarkCar.Application.Commands.CreateVehicleModelDetails;
 using BenchmarkCar.Domain.Entities;
+using BenchmarkCar.Infrastructure.ExternalApi;
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace BenchmarkCar.Infrastructure.Model.CarApi;
@@ -89,9 +91,9 @@ public class MakeModelTrimBody
         => new CreateBodyModel(
             ExternalId: Id.ToString() ?? string.Empty,
             Door: Doors ?? 0,
-            Length: Convert.ToDecimal(Length),
+            Length: Convert.ToDecimal(Length, ApiHelper.CarApiCultureInfo),
             Seats: Seats ?? 0,
-            Width: Convert.ToDecimal(Width));
+            Width: Convert.ToDecimal(Width, ApiHelper.CarApiCultureInfo));
 }
 
 public class MakeModelTrimEngine
@@ -145,7 +147,7 @@ public class MakeModelTrimEngine
         => new CreateEngineModel(
             ExternalId: Id.ToString() ?? string.Empty,
             Valves: Valves,
-            EngineSize: (Convert.ToDouble(Size) as int?) ?? 0,
+            EngineSize: Convert.ToDecimal(Size, ApiHelper.CarApiCultureInfo),
             HorsePowerHp: HorsepowerHp,
             HorsePowerRpm: HorsepowerRpm,
             TorqueFtLbs: TorqueFtLbs,

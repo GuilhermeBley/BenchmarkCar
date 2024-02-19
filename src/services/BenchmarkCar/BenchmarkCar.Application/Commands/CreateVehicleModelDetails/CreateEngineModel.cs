@@ -3,7 +3,7 @@
 public record CreateEngineModel(
     string ExternalId,
     decimal? Valves,
-    int? EngineSize,
+    decimal? EngineSize,
     decimal? HorsePowerHp,
     decimal? HorsePowerRpm,
     decimal? TorqueFtLbs,

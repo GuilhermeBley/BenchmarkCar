@@ -12,6 +12,7 @@ public class ModelEngineModel
     public decimal? HorsePowerRpm { get; set; }
     public decimal? TorqueFtLbs { get; set; }
     public decimal? TorqueRpm { get; set; }
+    public decimal? EngineSize { get; set; }
 
     public static ModelEngineModel MapFromEntity(ModelEngine entity)
         => new()
@@ -23,6 +24,7 @@ public class ModelEngineModel
             Valves = entity.Valves,
             ModelId = entity.ModelId,
             TorqueFtLbs = entity.TorqueFtLbs,
-            TorqueRpm = entity.TorqueRpm
+            TorqueRpm = entity.TorqueRpm,
+            EngineSize = entity.EngineSize,
         };
 }

@@ -60,7 +60,7 @@ public class ModelEngine
     /// The same of <see cref="TorqueFtLbs"/>, but the way to measure is in speed or revolutions per minute
     /// </summary>
     public decimal? TorqueRpm { get; private set; }
-    public int? EngineSize { get; private set; }
+    public decimal? EngineSize { get; private set; }
 
     private ModelEngine(
         Guid modelId, 
@@ -71,7 +71,7 @@ public class ModelEngine
         decimal? horsePowerRpm, 
         decimal? torqueFtLbs, 
         decimal? torqueRpm,
-        int? engineSize)
+        decimal? engineSize)
     {
         ModelId = modelId;
         ExternalId = externalId;
@@ -126,7 +126,7 @@ public class ModelEngine
         decimal? horsePowerRpm,
         decimal? torqueFtLbs,
         decimal? torqueRpm,
-        int? engineSize)
+        decimal? engineSize)
         => Create(modelId: model.Id,
         externalId: externalId,
         insertedAt: insertedAt,
@@ -146,7 +146,7 @@ public class ModelEngine
         decimal? horsePowerRpm,
         decimal? torqueFtLbs,
         decimal? torqueRpm,
-        int? engineSize)
+        decimal? engineSize)
     {
         if (valves < 0)
             throw new CommonCoreException("Invalid 'valves' number.");
