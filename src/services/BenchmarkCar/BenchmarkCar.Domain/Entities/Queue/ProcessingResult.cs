@@ -17,5 +17,5 @@ public sealed record ProcessingResult(
     }
 
     public static bool IsValidadExpirationDate(DateTimeOffset date)
-        => date < DateTimeOffset.UtcNow.AddMinutes(1);
+        => DateTimeOffset.UtcNow.AddMinutes(1) < date;
 }
