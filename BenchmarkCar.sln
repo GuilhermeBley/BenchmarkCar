@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkCar.EventBus", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkCar.EventBus.Azure", "src\BuildingBlocks\EventBus\BenchmarkCar.EventBus.Azure\BenchmarkCar.EventBus.Azure.csproj", "{D568D415-C037-483F-8481-292B6FCC000A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BenchmarkCar.Ui.React", "src\services\BenchmarkCar\BenchmarkCar.Ui.React\BenchmarkCar.Ui.React.csproj", "{DB0ADBC9-6C27-4C12-A552-563569589841}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,6 +60,10 @@ Global
 		{D568D415-C037-483F-8481-292B6FCC000A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D568D415-C037-483F-8481-292B6FCC000A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D568D415-C037-483F-8481-292B6FCC000A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB0ADBC9-6C27-4C12-A552-563569589841}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB0ADBC9-6C27-4C12-A552-563569589841}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB0ADBC9-6C27-4C12-A552-563569589841}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB0ADBC9-6C27-4C12-A552-563569589841}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3DDDBC26-33F3-434B-A865-EFD346809096} = {06A11408-AE9D-4413-BBEE-AB0BEC3D6EC4}
@@ -70,5 +76,6 @@ Global
 		{9618746A-3C0B-43BF-8925-8F85E6D99CFA} = {2E85A050-4740-4A9D-8860-DEAF519B292E}
 		{74DB12DD-3427-4034-90AE-360B976A6CAC} = {9618746A-3C0B-43BF-8925-8F85E6D99CFA}
 		{D568D415-C037-483F-8481-292B6FCC000A} = {9618746A-3C0B-43BF-8925-8F85E6D99CFA}
+		{DB0ADBC9-6C27-4C12-A552-563569589841} = {97E77D26-428B-44F5-BD92-5E540BA6E3CA}
 	EndGlobalSection
 EndGlobal
