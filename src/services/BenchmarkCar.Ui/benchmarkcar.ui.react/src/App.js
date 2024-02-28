@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 
 import Home from './Pages/Home'
 import NotFound from './Pages/NotFound'
+import NavBarLayout from './components/NavBarLayout'
 
 class App extends Component {
   
@@ -10,7 +11,7 @@ class App extends Component {
     return (
       <div className="App">
         <Routes>
-            <Route exact path="/" element={<Home/>}/>
+            <Route exact path="/" element={<NavBarLayout><Home/></NavBarLayout>}/>
             <Route path='*' exact={true} element={<NotFound/>}/>
         </Routes>
       </div>
