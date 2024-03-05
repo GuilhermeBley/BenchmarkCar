@@ -6,13 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import './i18n';
 
-const webpack = require('webpack');
+require('dotenv').config();
 
-require('dotenv').config({ path: './.env' });
+const Dotenv = require('dotenv-webpack');
 
-new webpack.DefinePlugin({
-  "process.env": JSON.stringify(process.env),
-});
+module.exports = {
+  plugins: [
+    new Dotenv()
+  ]
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
