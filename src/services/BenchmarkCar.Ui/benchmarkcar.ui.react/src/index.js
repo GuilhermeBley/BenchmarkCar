@@ -6,16 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import './i18n';
 
-require('dotenv').config();
-
-const Dotenv = require('dotenv-webpack');
-
-module.exports = {
-  plugins: [
-    new Dotenv()
-  ]
-};
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
