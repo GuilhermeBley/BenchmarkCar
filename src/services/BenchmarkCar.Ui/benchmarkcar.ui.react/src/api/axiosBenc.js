@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const createApiBench = () =>{
 
-  const apiUrl = process.env.BENCHMARKCAR_URL;
+  const apiUrl = process.env.REACT_APP_BENCHMARKCAR_URL;
   
   console.log('Benchmark API: ' + apiUrl);
 

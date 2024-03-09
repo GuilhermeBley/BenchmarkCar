@@ -6,10 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import './i18n';
 import dotenv from 'dotenv';
-import path from 'path';
 
 // Configure dotenv
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config();
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
