@@ -38,6 +38,17 @@ builder.Services.AddOptions<BenchmarkCar.EventBus.Azure.AzureServiceBusOptions>(
     .Bind(builder.Configuration.GetSection(BenchmarkCar.EventBus.Azure.AzureServiceBusOptions.SECTION))
     .ValidateDataAnnotations();
 
+const string ALLOW_REACT_APP_CORS_KEY = "AllowReactApp";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(ALLOW_REACT_APP_CORS_KEY,
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
+
 var app = builder.Build();
 
 app.Services.GetRequiredService<IEventBus>();
@@ -50,6 +61,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(ALLOW_REACT_APP_CORS_KEY);
 
 app.UseAuthorization();
 
