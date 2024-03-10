@@ -17,6 +17,7 @@ class Home extends Component {
 
     componentDidMount() {
         document.title = "Home";
+        this.setVehiclesMakes();
     }
 
     async setVehiclesMakes() {
@@ -24,11 +25,11 @@ class Home extends Component {
                 await axiosBenc.get('/api/vehiclemake');
 
         if (response.status >= 200 && response.status < 300) {
-            let data = await response.json();
+            let data = response.data;
             this.setState(prevState =>
                 prevState.makes = data
             );
-            console.success('Data collected.' + data)
+            console.info('Data collected.' + data)
         }
     }
 
@@ -36,22 +37,20 @@ class Home extends Component {
 
         const { t } = this.props;
 
-        this.setVehiclesMakes();
-
         return (
             <div className="container">
                 <div className="row">
                     <div className="col-md">
                         <div className="text-center">
 
-                            <h2>{t('home-title')}</h2>
+                            <h2>{t('h   ome-title')}</h2>
 
                             <div>
                                 <input type="text" name="city" list="cityname"/>
                                 <datalist id="cityname">
                                     <option value="Boston"></option>
                                     {this.state.makes.map((make) => (
-                                        <option value={make.Id}>{make.Name}</option>
+                                        <option value={make.name}></option>
                                     ))}
                                 </datalist>
                             </div>
