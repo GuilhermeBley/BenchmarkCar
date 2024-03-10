@@ -19,26 +19,17 @@ class Home extends Component {
         document.title = "Home";
     }
 
-    setVehiclesMakes() {
-        let response = [];
-        let success = false;
+    async setVehiclesMakes() {
+        var response =
+                await axiosBenc.get('/api/vehiclemake');
 
-        axiosBenc
-            .get('/api/vehiclemake')
-            .then(response => {
-                if (response.status >= 200 && response.status < 300) {
-                    response = response.data;
-                    success = true;
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching data:', error);
-            });
-
-        if (success)
+        if (response.status >= 200 && response.status < 300) {
+            let data = await response.json();
             this.setState(prevState =>
-                prevState.makes = response
+                prevState.makes = data
             );
+            console.success('Data collected.' + data)
+        }
     }
 
     render() {
@@ -56,7 +47,13 @@ class Home extends Component {
                             <h2>{t('home-title')}</h2>
 
                             <div>
-
+                                <input type="text" name="city" list="cityname"/>
+                                <datalist id="cityname">
+                                    <option value="Boston"></option>
+                                    {this.state.makes.map((make) => (
+                                        <option value={make.Id}>{make.Name}</option>
+                                    ))}
+                                </datalist>
                             </div>
                         </div>
                     </div>
