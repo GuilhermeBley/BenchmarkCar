@@ -45,10 +45,9 @@ class Home extends Component {
 
                             <h2>{t('h   ome-title')}</h2>
 
-                            <div>
-                                <input type="text" name="city" list="cityname"/>
-                                <datalist id="cityname">
-                                    <option value="Boston"></option>
+                            <div class="vehicleInput">
+                                <input type="text" name="vehicleLeft" list="vehicleLeft" />
+                                <datalist id="vehicleLeft">
                                     {this.state.makes.map((make) => (
                                         <option value={make.name}></option>
                                     ))}
