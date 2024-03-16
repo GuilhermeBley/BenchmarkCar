@@ -35,6 +35,7 @@ class Home extends Component {
 
     /**
      * Only set the left vehicle
+     * @param {string} vehicleLeftId 
      */
     handleInputRightChange(vehicleLeftId) {
 
@@ -51,6 +52,7 @@ class Home extends Component {
 
     /**
      * Redirect user to vehicle comparison page
+     * @param {string} vehicleRightId 
      */
     handleInputLeftChange(vehicleRightId) {
         
