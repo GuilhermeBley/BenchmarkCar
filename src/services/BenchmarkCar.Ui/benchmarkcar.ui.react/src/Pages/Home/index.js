@@ -10,7 +10,7 @@ class Home extends Component {
 
         this.state = {
             left: null,
-            right: null,
+            error: null,
             makes: []
         }
     }
@@ -33,6 +33,50 @@ class Home extends Component {
         }
     }
 
+    /**
+     * Only set the left vehicle
+     */
+    handleInputRightChange(vehicleLeftId) {
+
+        if (vehicleLeftId == null)
+        {
+            console.log('Vehicle left is null.');
+            return;
+        }
+
+        this.setState(prevState => {
+            prevState.left = vehicleLeftId
+        });
+    }
+
+    /**
+     * Redirect user to vehicle comparison page
+     */
+    handleInputLeftChange(vehicleRightId) {
+        
+        if (this.left == null)
+        {
+            console.log('Vehicle left is null.');
+            return;
+        }
+        
+        if (vehicleRightId == null)
+        {
+            console.log('Vehicle right is null.');
+            return;
+        }
+
+        if (vehicleRightId == this.left)
+        {
+            this.setState(prevState => {
+                prevState.error = t('sameVehicleInputError', '')
+            });
+            return;
+        }
+
+        console.log("Redirecting to another page.");
+    }
+
     render() {
 
         const { t } = this.props;
@@ -46,7 +90,7 @@ class Home extends Component {
                             <h2>{t('home-title')}</h2>
 
                             <div class="vehicleInput">
-                                <input type="text" name="vehicleLeft" list="vehicleLeft" />
+                                <input type="text" name="vehicleLeft" list="vehicleLeft" onChange={(e) => this.handleInputLeftChange(e.target.value)}/>
                                 <datalist id="vehicleLeft">
                                     {this.state.makes.map((make) => (
                                         <option value={make.name}></option>
@@ -54,7 +98,7 @@ class Home extends Component {
                                 </datalist>
                             </div>
                             <div class="vehicleInput">
-                                <input type="text" name="vehicleRight" list="vehicleRight" />
+                                <input type="text" name="vehicleRight" list="vehicleRight" onChange={(e) => this.handleInputRightChange(e.target.value)}/>
                                 <datalist id="vehicleRight">
                                     {this.state.makes.map((make) => (
                                         <option value={make.name}></option>

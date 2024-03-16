@@ -1,3 +1,4 @@
 {
-    "home-title": "Selecione os veículos para a comparação"
+    "home-title": "Selecione os veículos para a comparação",
+    "sameVehicleInputError": "Não é possível realizar comparações entre dois mesmos veículos."
 }
