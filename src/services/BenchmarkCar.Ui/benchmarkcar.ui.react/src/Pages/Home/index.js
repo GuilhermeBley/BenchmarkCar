@@ -43,11 +43,19 @@ class Home extends Component {
                     <div className="col-md">
                         <div className="text-center">
 
-                            <h2>{t('h   ome-title')}</h2>
+                            <h2>{t('home-title')}</h2>
 
                             <div class="vehicleInput">
                                 <input type="text" name="vehicleLeft" list="vehicleLeft" />
                                 <datalist id="vehicleLeft">
+                                    {this.state.makes.map((make) => (
+                                        <option value={make.name}></option>
+                                    ))}
+                                </datalist>
+                            </div>
+                            <div class="vehicleInput">
+                                <input type="text" name="vehicleRight" list="vehicleRight" />
+                                <datalist id="vehicleRight">
                                     {this.state.makes.map((make) => (
                                         <option value={make.name}></option>
                                     ))}
