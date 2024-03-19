@@ -92,4 +92,19 @@ public class VehicleModelController : ControllerBase
 
         return Ok(result.Values);
     }
+
+    [HttpGet("make-model")]
+    public async Task<ActionResult> GetMakeAndModelByFilterAsycn(
+        [FromQuery] string? filter,
+        CancellationToken cancellationToken = default)
+    {
+        _logger.LogTrace("Requesting make and model '{0}' at {1}.",
+            filter, DateTimeOffset.UtcNow);
+
+        var result = await _mediator.Send(
+            new BenchmarkCar.Application.Commands.GetModelsByName.GetModelsByNameRequest(filter),
+            cancellationToken);
+
+        return Ok(result.Items);
+    }
 }
