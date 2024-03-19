@@ -102,7 +102,7 @@ public class VehicleModelController : ControllerBase
             filter, DateTimeOffset.UtcNow);
 
         var result = await _mediator.Send(
-            new BenchmarkCar.Application.Commands.GetModelsByName.GetModelsByNameRequest(filter),
+            new BenchmarkCar.Application.Commands.GetModelsByName.GetMakesAndModelsByFilterRequest(filter),
             cancellationToken);
 
         return Ok(result.Items);

@@ -2,6 +2,6 @@ using MediatR;
 
 namespace BenchmarkCar.Application.Commands.GetModelsByName;
 
-public record GetModelsByNameRequest(
+public record GetMakesAndModelsByFilterRequest(
     string? Filter)
-    : IRequest<GetModelsByNameResponse>;
+    : IRequest<GetMakesAndModelsByFilterResponse>;

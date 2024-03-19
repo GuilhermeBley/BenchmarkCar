@@ -4,22 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BenchmarkCar.Application.Commands.GetModelsByName;
 
-public class GetModelsByNameCommand
-    : IRequestHandler<GetModelsByNameRequest, GetModelsByNameResponse>
+public class GetMakesAndModelsByFilterCommand
+    : IRequestHandler<GetMakesAndModelsByFilterRequest, GetMakesAndModelsByFilterResponse>
 {
     private readonly BenchmarkVehicleContext _context;
     private readonly ICoreLogger _logger;
 
-    public GetModelsByNameCommand(
+    public GetMakesAndModelsByFilterCommand(
         BenchmarkVehicleContext context,
-        ICoreLogger<GetModelsByNameCommand> logger)
+        ICoreLogger<GetMakesAndModelsByFilterCommand> logger)
     {
         _context = context;
         _logger = logger;
     }
 
-    public async Task<GetModelsByNameResponse> Handle(
-        GetModelsByNameRequest request, 
+    public async Task<GetMakesAndModelsByFilterResponse> Handle(
+        GetMakesAndModelsByFilterRequest request, 
         CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -33,7 +33,7 @@ public class GetModelsByNameCommand
             where 
                 EF.Functions.Like(make.NormalizedName, $"%{normalizedFilter}%") || 
                 EF.Functions.Like(model.NormalizedName, $"%{normalizedFilter}%")
-            select new GetModelsByNameItemResponse(
+            select new GetMakesAndModelsByFilterItemResponse(
                 make.Name,
                 model.Name,
                 string.Concat(make.Name, '-', model.Name, ' ', model.Year),

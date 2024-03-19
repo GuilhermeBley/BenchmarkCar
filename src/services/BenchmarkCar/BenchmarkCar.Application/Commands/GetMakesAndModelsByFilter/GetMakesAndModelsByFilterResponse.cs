@@ -1,10 +1,10 @@
 namespace BenchmarkCar.Application.Commands.GetModelsByName;
 
-public record GetModelsByNameResponse(
-    IEnumerable<GetModelsByNameItemResponse> Items
+public record GetMakesAndModelsByFilterResponse(
+    IEnumerable<GetMakesAndModelsByFilterItemResponse> Items
 );
 
-public record GetModelsByNameItemResponse(
+public record GetMakesAndModelsByFilterItemResponse(
     string MakeName,
     string ModelName,
     string EntireName,
