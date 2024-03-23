@@ -9,7 +9,7 @@ class App extends Component {
   
   render() {
     return (
-      <div className="App">
+      <div className="App h-100">
         <Routes>
             <Route exact path="/" element={<NavBarLayout><Home/></NavBarLayout>}/>
             <Route path='*' exact={true} element={<NotFound/>}/>

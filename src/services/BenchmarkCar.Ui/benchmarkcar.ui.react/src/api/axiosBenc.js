@@ -9,7 +9,7 @@ const createApiBench = () =>{
 
   return axios.create({
     baseURL: apiUrl,
-    timeout: 5000,
+    timeout: 50000,
     headers: {
       'Content-Type': 'application/json',
       },

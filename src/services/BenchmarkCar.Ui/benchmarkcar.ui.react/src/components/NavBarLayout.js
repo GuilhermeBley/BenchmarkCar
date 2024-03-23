@@ -36,7 +36,7 @@ const NavMenu = () => {
 const Layout = ({ children }) => {
 
     return (
-        <div>
+        <div className='h-100'>
             <NavMenu />
             {children}
         </div>

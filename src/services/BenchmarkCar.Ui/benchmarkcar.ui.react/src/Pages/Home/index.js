@@ -56,6 +56,8 @@ class Home extends Component {
      */
     handleInputLeftChange(vehicleRightId) {
         
+        const { t } = this.props;
+
         if (this.left == null)
         {
             console.log('Vehicle left is null.');
@@ -68,7 +70,7 @@ class Home extends Component {
             return;
         }
 
-        if (vehicleRightId == this.left)
+        if (vehicleRightId === this.left)
         {
             this.setState(prevState => {
                 prevState.error = t('sameVehicleInputError', '')
@@ -84,10 +86,10 @@ class Home extends Component {
         const { t } = this.props;
 
         return (
-            <div className="container">
-                <div className="row">
-                    <div className="col-md">
-                        <div className="text-center">
+            <div class="container-fluid w-100 h-auto">
+                <div class="row">
+                    <div class="col-md">
+                        <div class="text-center">
 
                             <h2>{t('home-title')}</h2>
 
@@ -95,7 +97,7 @@ class Home extends Component {
                                 <input type="text" name="vehicleLeft" list="vehicleLeft" onChange={(e) => this.handleInputLeftChange(e.target.value)}/>
                                 <datalist id="vehicleLeft">
                                     {this.state.makes.map((make) => (
-                                        <option value={make.name}></option>
+                                        <option value={make.entireName}></option>
                                     ))}
                                 </datalist>
                             </div>
@@ -103,7 +105,7 @@ class Home extends Component {
                                 <input type="text" name="vehicleRight" list="vehicleRight" onChange={(e) => this.handleInputRightChange(e.target.value)}/>
                                 <datalist id="vehicleRight">
                                     {this.state.makes.map((make) => (
-                                        <option value={make.name}></option>
+                                        <option value={make.entireName}></option>
                                     ))}
                                 </datalist>
                             </div>
