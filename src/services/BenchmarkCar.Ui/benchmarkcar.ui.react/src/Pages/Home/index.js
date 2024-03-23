@@ -22,7 +22,7 @@ class Home extends Component {
 
     async setVehiclesMakes() {
         var response =
-                await axiosBenc.get('/api/vehiclemake');
+                await axiosBenc.get('/api/vehiclemodel/make-model');
 
         if (response.status >= 200 && response.status < 300) {
             let data = response.data;
