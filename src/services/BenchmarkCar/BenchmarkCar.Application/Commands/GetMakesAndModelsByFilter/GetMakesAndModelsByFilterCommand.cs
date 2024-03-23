@@ -24,25 +24,37 @@ public class GetMakesAndModelsByFilterCommand
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        var normalizedFilter = request.Filter?.ToUpperInvariant();
+        var normalizedFilter = request.Filter?.Trim('\n', ' ', '\t').ToUpperInvariant() ?? string.Empty;
 
-        var query = 
+        var queryJoin =
             from make in _context.VehiclesMakes.AsNoTracking()
             join model in _context.VehiclesModels.AsNoTracking()
                 on make.Id equals model.VehicleMakeId
-            where 
-                EF.Functions.Like(make.NormalizedName, $"%{normalizedFilter}%") || 
-                EF.Functions.Like(model.NormalizedName, $"%{normalizedFilter}%")
+            select new { make, model };
+            
+        if (normalizedFilter.Length > 1)
+        {
+            queryJoin =
+            from make in _context.VehiclesMakes.AsNoTracking()
+            join model in _context.VehiclesModels.AsNoTracking()
+                on make.Id equals model.VehicleMakeId
+            where
+                make.NormalizedName.Contains($"{normalizedFilter}") ||
+                model.NormalizedName.Contains($"{normalizedFilter}")
+            select new { make, model };
+        }
+        
+        var query =
+            (from item in queryJoin
+             orderby item.make.NormalizedName
             select new GetMakesAndModelsByFilterItemResponse(
-                make.Name,
-                model.Name,
-                string.Concat(make.Name, '-', model.Name, ' ', model.Year),
-                model.Id,
-                model.Year
-            );
-
-        // Doing pagination and ordering
-        query = query.OrderBy(e => e.EntireName).Take(100);
+                item.make.Name,
+                item.model.Name,
+                string.Concat(item.make.Name, '-', item.model.Name, ' ', item.model.Year),
+                item.model.Id,
+                item.model.Year
+            ))
+            .Take(100);
 
         return new (await query.ToListAsync(cancellationToken));
     }
