@@ -2,6 +2,8 @@ import React  from 'react';
 
 import { useTranslation } from 'react-i18next';
 
+import css from './NavBarLayout.css'
+
 const NavMenu = () => {
 
     const { t, i18n } = useTranslation();
@@ -13,7 +15,7 @@ const NavMenu = () => {
     }
 
     return (
-        <nav class="navbar navbar-expand-md navbar-light bg-primary">
+        <nav class="navbar navbar-expand-md navbar-light bg-primary nav-size">
             <a class="navbar-brand text-white" href="#">{t("nav-title")}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>

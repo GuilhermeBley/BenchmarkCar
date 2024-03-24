@@ -94,10 +94,10 @@ class Home extends Component {
         const { t } = this.props;
 
         return (
-            <div class="container-fluid w-100" styles="height: 100%;">
+            <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md">
-                        <div class="text-center">
+                    <div class="col-md h-100">
+                        <div class="card h-100 border-0 justify-content-center text-center">
 
                             <h2>{t('home-title')}</h2>
 
