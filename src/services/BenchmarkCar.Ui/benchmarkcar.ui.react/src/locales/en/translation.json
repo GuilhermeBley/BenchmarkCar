@@ -1,5 +1,6 @@
 {
     "home-title": "Select the vehicles to compare",
     "nav-title" : "Benchmark Car",
-    "sameVehicleInputError": "It isn't possible make a comparison between the same vehicle."
+    "sameVehicleInputError": "It isn't possible make a comparison between the same vehicle.",
+    "buttonSubmitVehiclesToCompare": "Make comparison"
 }

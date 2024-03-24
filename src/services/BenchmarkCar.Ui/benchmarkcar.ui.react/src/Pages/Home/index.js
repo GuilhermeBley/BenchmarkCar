@@ -21,15 +21,23 @@ class Home extends Component {
     }
 
     async setVehiclesMakes() {
-        var response =
-                await axiosBenc.get('/api/vehiclemodel/make-model');
 
-        if (response.status >= 200 && response.status < 300) {
-            let data = response.data;
-            this.setState(prevState =>
-                prevState.makes = data
-            );
-            console.info('Data collected.' + data)
+        try
+        {
+            var response =
+                    await axiosBenc.get('/api/vehiclemodel/make-model');
+
+            if (response.status >= 200 && response.status < 300) {
+                let data = response.data;
+                this.setState(prevState =>
+                    prevState.makes = data
+                );
+                console.info('Data collected.' + data)
+            }    
+        }
+        catch
+        {
+            console.error("Failed to get vehicles.");
         }
     }
 
@@ -86,7 +94,7 @@ class Home extends Component {
         const { t } = this.props;
 
         return (
-            <div class="container-fluid w-100 h-auto">
+            <div class="container-fluid w-100" styles="height: 100%;">
                 <div class="row">
                     <div class="col-md">
                         <div class="text-center">
@@ -108,6 +116,11 @@ class Home extends Component {
                                         <option value={make.entireName}></option>
                                     ))}
                                 </datalist>
+                            </div>
+                            <div class="submit-vehicles-to-compare-area">
+                                <div class="btn btn-outline-primary">
+                                    {t('buttonSubmitVehiclesToCompare', 'make comparison')}
+                                </div>
                             </div>
                         </div>
                     </div>
