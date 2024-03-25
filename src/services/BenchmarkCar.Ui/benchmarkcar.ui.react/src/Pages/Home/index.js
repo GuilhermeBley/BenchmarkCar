@@ -99,25 +99,25 @@ class Home extends Component {
                     <div class="col-md h-100">
                         <div class="card h-100 border-0 justify-content-center text-center">
 
-                            <h2>{t('home-title')}</h2>
+                            <h2 class="mb-5">{t('home-title')}</h2>
 
-                            <div class="vehicleInput">
-                                <input type="text" name="vehicleLeft" list="vehicleLeft" onChange={(e) => this.handleInputLeftChange(e.target.value)}/>
+                            <div class="vehicleInput my-1">
+                                <input class="form-control" type="text" name="vehicleLeft" list="vehicleLeft" onChange={(e) => this.handleInputLeftChange(e.target.value)}/>
                                 <datalist id="vehicleLeft">
                                     {this.state.makes.map((make) => (
                                         <option value={make.entireName}></option>
                                     ))}
                                 </datalist>
                             </div>
-                            <div class="vehicleInput">
-                                <input type="text" name="vehicleRight" list="vehicleRight" onChange={(e) => this.handleInputRightChange(e.target.value)}/>
+                            <div class="vehicleInput my-1">
+                                <input class="form-control" type="text" name="vehicleRight" list="vehicleRight" onChange={(e) => this.handleInputRightChange(e.target.value)}/>
                                 <datalist id="vehicleRight">
                                     {this.state.makes.map((make) => (
                                         <option value={make.entireName}></option>
                                     ))}
                                 </datalist>
                             </div>
-                            <div class="submit-vehicles-to-compare-area">
+                            <div class="submit-vehicles-to-compare-area my-1">
                                 <div class="btn btn-outline-primary">
                                     {t('buttonSubmitVehiclesToCompare', 'make comparison')}
                                 </div>
