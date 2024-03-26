@@ -1,3 +1,8 @@
 .container-fluid, .row, .col{
     height: calc(100% - 50px) !important;
 }
+
+.vehicleInput input {
+    width: auto;
+    display: inline;
+}

@@ -22,10 +22,9 @@ class Home extends Component {
 
     async setVehiclesMakes() {
 
-        try
-        {
+        try {
             var response =
-                    await axiosBenc.get('/api/vehiclemodel/make-model');
+                await axiosBenc.get('/api/vehiclemodel/make-model');
 
             if (response.status >= 200 && response.status < 300) {
                 let data = response.data;
@@ -33,7 +32,7 @@ class Home extends Component {
                     prevState.makes = data
                 );
                 console.info('Data collected.' + data)
-            }    
+            }
         }
         catch
         {
@@ -47,8 +46,7 @@ class Home extends Component {
      */
     handleInputRightChange(vehicleLeftId) {
 
-        if (vehicleLeftId == null)
-        {
+        if (vehicleLeftId == null) {
             console.log('Vehicle left is null.');
             return;
         }
@@ -63,23 +61,20 @@ class Home extends Component {
      * @param {string} vehicleRightId 
      */
     handleInputLeftChange(vehicleRightId) {
-        
+
         const { t } = this.props;
 
-        if (this.left == null)
-        {
+        if (this.left == null) {
             console.log('Vehicle left is null.');
             return;
         }
-        
-        if (vehicleRightId == null)
-        {
+
+        if (vehicleRightId == null) {
             console.log('Vehicle right is null.');
             return;
         }
 
-        if (vehicleRightId === this.left)
-        {
+        if (vehicleRightId === this.left) {
             this.setState(prevState => {
                 prevState.error = t('sameVehicleInputError', '')
             });
@@ -102,7 +97,7 @@ class Home extends Component {
                             <h2 class="mb-5">{t('home-title')}</h2>
 
                             <div class="vehicleInput my-1">
-                                <input class="form-control" type="text" name="vehicleLeft" list="vehicleLeft" onChange={(e) => this.handleInputLeftChange(e.target.value)}/>
+                                <input class="form-control" type="text" name="vehicleLeft" list="vehicleLeft" onChange={(e) => this.handleInputLeftChange(e.target.value)} />
                                 <datalist id="vehicleLeft">
                                     {this.state.makes.map((make) => (
                                         <option value={make.entireName}></option>
@@ -110,7 +105,7 @@ class Home extends Component {
                                 </datalist>
                             </div>
                             <div class="vehicleInput my-1">
-                                <input class="form-control" type="text" name="vehicleRight" list="vehicleRight" onChange={(e) => this.handleInputRightChange(e.target.value)}/>
+                                <input class="form-control" type="text" name="vehicleRight" list="vehicleRight" onChange={(e) => this.handleInputRightChange(e.target.value)} />
                                 <datalist id="vehicleRight">
                                     {this.state.makes.map((make) => (
                                         <option value={make.entireName}></option>
@@ -122,6 +117,7 @@ class Home extends Component {
                                     {t('buttonSubmitVehiclesToCompare', 'make comparison')}
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
