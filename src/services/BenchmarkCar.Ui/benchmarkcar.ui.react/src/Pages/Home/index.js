@@ -13,6 +13,8 @@ class Home extends Component {
             error: null,
             makes: []
         }
+
+        this.handleSubmitComparison = this.handleSubmitComparison.bind(this);
     }
 
     componentDidMount() {
@@ -38,6 +40,10 @@ class Home extends Component {
         {
             console.error("Failed to get vehicles.");
         }
+    }
+
+    handleSubmitComparison = () => {
+        this.props.history.push('/path')
     }
 
     /**
@@ -128,9 +134,9 @@ class Home extends Component {
                                 </div>
                             </div>
                             <div class="submit-vehicles-to-compare-area my-1">
-                                <div class="btn btn-outline-primary">
+                                <button class="btn btn-outline-primary" onClick={this.handleSubmitComparison}>
                                     {t('buttonSubmitVehiclesToCompare', 'make comparison')}
-                                </div>
+                                </button>
                             </div>
 
                         </div>
