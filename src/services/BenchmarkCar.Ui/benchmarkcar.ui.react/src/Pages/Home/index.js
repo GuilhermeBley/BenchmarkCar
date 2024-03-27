@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import axiosBenc from '../../api/axiosBenc'
 
-import styles from './index.css';
+import './index.css';
 
 class Home extends Component {
     constructor(props) {
@@ -96,21 +96,36 @@ class Home extends Component {
 
                             <h2 class="mb-5">{t('home-title')}</h2>
 
-                            <div class="vehicleInput my-1">
-                                <input class="form-control" type="text" name="vehicleLeft" list="vehicleLeft" onChange={(e) => this.handleInputLeftChange(e.target.value)} />
-                                <datalist id="vehicleLeft">
-                                    {this.state.makes.map((make) => (
-                                        <option value={make.entireName}></option>
-                                    ))}
-                                </datalist>
+                            <div class="vehicleInput my-1  w-vehicleInput">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="vehicleLeft">
+                                            <i class="bi bi-car-front"></i>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" placeholder="Type the vehicle model or make" aria-label="Type the vehicle model or make" type="text" name="vehicleLeft" list="vehicleLeftList" onChange={(e) => this.handleInputRightChange(e.target.value)} />
+                                    <datalist id="vehicleLeftList">
+                                        {this.state.makes.map((make) => (
+                                            <option value={make.entireName}></option>
+                                        ))}
+                                    </datalist>
+                                </div>
                             </div>
-                            <div class="vehicleInput my-1">
-                                <input class="form-control" type="text" name="vehicleRight" list="vehicleRight" onChange={(e) => this.handleInputRightChange(e.target.value)} />
-                                <datalist id="vehicleRight">
-                                    {this.state.makes.map((make) => (
-                                        <option value={make.entireName}></option>
-                                    ))}
-                                </datalist>
+
+                            <div class="vehicleInput my-1  w-vehicleInput">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="vehicleRight">
+                                            <i class="bi bi-car-front-fill"></i>
+                                        </span>
+                                    </div>
+                                    <input class="form-control" placeholder="Type the vehicle model or make" aria-label="Type the vehicle model or make" type="text" name="vehicleRight" list="vehicleRightList" onChange={(e) => this.handleInputRightChange(e.target.value)} />
+                                    <datalist id="vehicleRightList">
+                                        {this.state.makes.map((make) => (
+                                            <option value={make.entireName}></option>
+                                        ))}
+                                    </datalist>
+                                </div>
                             </div>
                             <div class="submit-vehicles-to-compare-area my-1">
                                 <div class="btn btn-outline-primary">
