@@ -4,6 +4,16 @@ import axiosBenc from '../../api/axiosBenc'
 
 import './index.css';
 
+import {useNavigate} from 'react-router-dom'
+
+const withRouter = (Component) => {
+    const Wrapper = (props) => {
+        const navigate = useNavigate();
+        return <Component navigate={navigate} {...props} />
+    }
+    return Wrapper;
+}
+
 class Home extends Component {
     constructor(props) {
         super(props);
@@ -43,7 +53,7 @@ class Home extends Component {
     }
 
     handleSubmitComparison = () => {
-        this.props.history.push('/path')
+        this.props.navigate('/path')
     }
 
     /**
@@ -147,4 +157,6 @@ class Home extends Component {
     }
 }
 
-export default withTranslation()(Home);
+const transalatedPage = withTranslation()(Home);
+
+export default withRouter(transalatedPage);
