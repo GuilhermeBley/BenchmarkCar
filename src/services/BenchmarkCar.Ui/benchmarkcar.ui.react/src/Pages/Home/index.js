@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import axiosBenc from '../../api/axiosBenc'
+import withRouter from '../../components/withRouter'
 
 import './index.css';
-
-import {useNavigate} from 'react-router-dom'
-
-const withRouter = (Component) => {
-    const Wrapper = (props) => {
-        const navigate = useNavigate();
-        return <Component navigate={navigate} {...props} />
-    }
-    return Wrapper;
-}
 
 class Home extends Component {
     constructor(props) {

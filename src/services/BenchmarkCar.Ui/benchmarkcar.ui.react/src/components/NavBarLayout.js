@@ -1,7 +1,6 @@
-import React  from 'react';
+import React from 'react';
 
 import { useTranslation } from 'react-i18next';
-
 import css from './NavBarLayout.css'
 
 const NavMenu = () => {
@@ -10,7 +9,7 @@ const NavMenu = () => {
 
     const HandleLanguageChange = (event) => {
         const selectedLanguage = event.target.value;
-    
+
         i18n.changeLanguage(selectedLanguage);
     }
 
