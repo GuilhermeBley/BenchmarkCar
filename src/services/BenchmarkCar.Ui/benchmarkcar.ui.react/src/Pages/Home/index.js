@@ -11,7 +11,7 @@ class Home extends Component {
 
         this.state = {
             left: null,
-            error: null,
+            errors: [],
             makes: []
         }
 
@@ -44,7 +44,22 @@ class Home extends Component {
     }
 
     handleSubmitComparison = () => {
-        this.props.navigate('/path')
+        if (this.state.left == null || this.state.right == null)
+        {
+            this.handleError(t('Vehicle-not-selected', 'Please, select the vehicles to compare.'));
+            return;
+        }
+
+        var url
+            = 'compare-vehicles/{left}_{right}'
+                .replace('{left}', this.state.left)
+                .replace('{right}', this.state.right);
+        this.props.navigate(url);
+    }
+
+    handleError(errorMessage) {
+        this.setState(prevState =>
+            prevState.errors.push(errorMessage));
     }
 
     /**
