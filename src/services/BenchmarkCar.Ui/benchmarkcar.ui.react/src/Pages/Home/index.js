@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withTranslation } from 'react-i18next';
 import axiosBenc from '../../api/axiosBenc'
 import withRouter from '../../components/withRouter'
+import topAlert from '../../components/alert'
 
 import './index.css';
 
@@ -25,6 +26,8 @@ class Home extends Component {
 
     async setVehiclesMakes() {
 
+        const { t } = this.props;
+
         try {
             var response =
                 await axiosBenc.get('/api/vehiclemodel/make-model');
@@ -39,11 +42,15 @@ class Home extends Component {
         }
         catch
         {
+            this.handleError(t('failedToLoadVehiclesModels', 'Failed to load vehicles.'));
             console.error("Failed to get vehicles.");
         }
     }
 
     handleSubmitComparison = () => {
+        
+        const { t } = this.props;
+
         if (this.state.left == null || this.state.right == null)
         {
             this.handleError(t('Vehicle-not-selected', 'Please, select the vehicles to compare.'));
@@ -117,6 +124,8 @@ class Home extends Component {
                         <div class="card h-100 border-0 justify-content-center text-center">
 
                             <h2 class="mb-5">{t('home-title')}</h2>
+
+                            {topAlert(this.state.errors)}
 
                             <div class="vehicleInput my-1  w-vehicleInput">
                                 <div class="input-group mb-3">
